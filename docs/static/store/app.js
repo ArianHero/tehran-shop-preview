@@ -10,8 +10,9 @@
   }
   const products = runtime.products;
   const byId = new Map(products.map(product => [product.id, product]));
+  const grid = $('#product-grid');
   const cards = new Map($$('#product-grid .product-card').map(card => [Number(card.dataset.productId), card]));
-  const initialIds = new Set(runtime.visible_ids);
+  const searchInput = $('#search-input');
   const fa = new Intl.NumberFormat('fa-IR');
   const cartKey = 'tehranshop:preview-cart:v4';
   const emptyCart = {items: [], count: 0, total: 0};
@@ -24,8 +25,13 @@
   let cart = emptyCart;
   let cartReady;
   let mutating = false;
-  let query = '';
-  let sizeFilter = '';
+  const params = new URLSearchParams(window.location.search);
+  const collectionName = params.get('collection');
+  const collectionIds = runtime.collection_ids?.[collectionName];
+  const activeCollection = Array.isArray(collectionIds) ? collectionName : '';
+  const collectionProducts = activeCollection ? new Set(collectionIds) : null;
+  const defaultSort = activeCollection === 'new-collection' ? 'newest' : 'featured';
+  let query = (params.get('q') || '').trim().slice(0, 120);
   let selectedProduct, selectedSize, selectedColor, toastTimer;
 
   function readArray(key) {
@@ -45,12 +51,23 @@
     }
   }
 
+  function normalizeDigits(value) {
+    return value.replace(/[۰-۹]/g, digit => '۰۱۲۳۴۵۶۷۸۹'.indexOf(digit))
+      .replace(/[٠-٩]/g, digit => '٠١٢٣٤٥٦٧٨٩'.indexOf(digit));
+  }
+
   function normalize(value) {
-    return String(value)
+    return normalizeDigits(String(value))
       .replace(/ي/g, 'ی')
       .replace(/ك/g, 'ک')
       .replace(/[\s\u200c\u200f\-–]/g, '')
       .toLowerCase();
+  }
+
+  function parsePrice(value) {
+    const digits = normalizeDigits(value).replace(/[,٬\s]/g, '');
+    if (!digits) return null;
+    return /^\d{1,12}$/.test(digits) ? Number(digits) : NaN;
   }
 
   function updateThemeButtons() {
@@ -65,65 +82,76 @@
   }
 
   function renderProducts() {
-    if (!$('#product-grid')) return;
-    const term = normalize(query);
+    if (!grid) return;
+    const terms = query.split(/\s+/).map(normalize).filter(Boolean);
+    const selectedCategory = $('#filter-category')?.value || '';
+    const category = runtime.category || selectedCategory;
+    const size = $('#filter-size').value;
+    const onlySale = $('#filter-sale').checked;
+    const minimumInput = $('#filter-min');
+    const maximumInput = $('#filter-max');
+    const minimum = parsePrice(minimumInput.value);
+    const maximum = parsePrice(maximumInput.value);
+    const reversed = minimum !== null && maximum !== null && minimum > maximum;
+    const invalidMinimum = Number.isNaN(minimum) || reversed;
+    const invalidMaximum = Number.isNaN(maximum) || reversed;
+    minimumInput.setAttribute('aria-invalid', String(invalidMinimum));
+    maximumInput.setAttribute('aria-invalid', String(invalidMaximum));
+    $('#filter-error').hidden = !invalidMinimum && !invalidMaximum;
+    const filterCount = [selectedCategory, size, minimumInput.value.trim(), maximumInput.value.trim(), onlySale]
+      .filter(Boolean).length;
+    $('#filter-count').hidden = filterCount === 0;
+    $('#filter-count').textContent = fa.format(filterCount);
+
     let count = 0;
 
     for (const product of products) {
-      const matchesScope = term || initialIds.has(product.id);
-      const matchesName = !term || normalize(
+      const searchable = normalize(
         product.name + ' ' + product.english + ' ' + product.category_name
-      ).includes(term);
-      const matchesSize = !sizeFilter || product.sizes.includes(sizeFilter);
-      const visible = matchesScope && matchesName && matchesSize;
+      );
+      const visible = (!category || product.category === category)
+        && (!collectionProducts || collectionProducts.has(product.id))
+        && terms.every(term => searchable.includes(term))
+        && (!size || product.sizes.includes(size))
+        && (!onlySale || product.sale_price !== null)
+        && (invalidMinimum || minimum === null || product.price >= minimum)
+        && (invalidMaximum || maximum === null || product.price <= maximum);
       const card = cards.get(product.id);
       card.hidden = !visible;
       count += Number(visible);
     }
 
-    for (const chip of $$('[data-filter-size]')) {
-      chip.setAttribute('aria-pressed', String(chip.dataset.filterSize === sizeFilter));
-    }
-
-    const activeFilters = [];
-    if (query) activeFilters.push('جستجو در همه دسته‌ها «' + query + '»');
-    if (sizeFilter) activeFilters.push('سایز ' + sizeFilter);
-
     $('#result-count').textContent = fa.format(count) + ' مدل';
     $('#empty-results').hidden = count > 0;
-    $('#active-filters').hidden = activeFilters.length === 0;
-    $('#filter-description').textContent = activeFilters.join(' · ');
+    $('#filter-description').hidden = !query;
+    $('#filter-description').textContent = query ? 'نتایج «' + query + '»' : '';
   }
 
   function sortProducts(order) {
     const ordered = [...products];
+    if (order === 'newest') ordered.sort((a, b) => b.id - a.id);
     if (order === 'price-asc') ordered.sort((a, b) => a.price - b.price);
     if (order === 'price-desc') ordered.sort((a, b) => b.price - a.price);
     if (order === 'name') ordered.sort((a, b) => a.name.localeCompare(b.name, 'fa'));
-    const grid = $('#product-grid');
     for (const product of ordered) grid.append(cards.get(product.id));
   }
 
   function resetFilters() {
     query = '';
-    sizeFilter = '';
-    $('#search-input').value = '';
-    renderProducts();
-  }
-
-  function setSearchOpen(open) {
-    $('#search-panel').hidden = !open;
-    if (runtime.page === 'home') $('#catalog').hidden = !open;
-    $('#search-toggle').setAttribute('aria-expanded', String(open));
-    if (open) {
-      $('#catalog').scrollIntoView({block: 'start'});
-      $('#search-input').focus({preventScroll: true});
-    } else {
-      query = '';
-      $('#search-input').value = '';
-      renderProducts();
-      $('#search-toggle').focus({preventScroll: true});
+    searchInput.value = '';
+    for (const selector of ['#filter-category', '#filter-size', '#filter-min', '#filter-max']) {
+      const input = $(selector);
+      if (input) input.value = '';
     }
+    $('#filter-sale').checked = false;
+    $('#sort-select').value = defaultSort;
+    sortProducts(defaultSort);
+    const url = new URL(window.location.href);
+    if (url.searchParams.has('q')) {
+      url.searchParams.delete('q');
+      window.history.replaceState(window.history.state, '', url);
+    }
+    renderProducts();
   }
 
   function showDialog(id) {
@@ -345,13 +373,13 @@
     }
   }
 
-  for (const chip of $$('[data-filter-size]')) {
-    chip.addEventListener('click', () => {
-      sizeFilter = chip.dataset.filterSize;
-      renderProducts();
-    });
-  }
-
+  const filterToggle = $('#filter-toggle');
+  const filterPanel = $('#catalog-filters');
+  filterToggle?.addEventListener('click', () => {
+    filterPanel.hidden = !filterPanel.hidden;
+    filterToggle.setAttribute('aria-expanded', String(!filterPanel.hidden));
+  });
+  filterPanel?.addEventListener('input', renderProducts);
   $('#sort-select')?.addEventListener('change', event => sortProducts(event.target.value));
   $('#reset-filters')?.addEventListener('click', resetFilters);
   $('#empty-reset')?.addEventListener('click', resetFilters);
@@ -376,14 +404,6 @@
       updateThemeButtons();
     });
   }
-
-  $('#search-toggle')?.addEventListener('click', () => setSearchOpen($('#search-panel').hidden));
-  $('#search-clear')?.addEventListener('click', () => setSearchOpen(false));
-  $('#search-panel')?.addEventListener('submit', event => event.preventDefault());
-  $('#search-input')?.addEventListener('input', event => {
-    query = event.target.value.trim();
-    renderProducts();
-  });
 
   $('#detail-gallery').addEventListener('click', event => {
     const button = event.target.closest('[data-photo-index]');
@@ -456,65 +476,23 @@
   window.addEventListener('scroll', syncHeader, {passive: true});
   syncHeader();
 
-  function initCarousel() {
-    const carousel = $('[data-carousel]');
-    if (!carousel) return;
-    const slides = [...carousel.querySelectorAll('[data-slide]')];
-    if (slides.length < 2) return;
-
-    const track = carousel.querySelector('.showcase-track');
-    const dots = [...carousel.querySelectorAll('[data-slide-to]')];
-    const toggle = carousel.querySelector('[data-slide-toggle]');
-    let active = 0;
-    let timer;
-    let paused = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    function showSlide(index) {
-      slides[active].hidden = true;
-      dots[active].removeAttribute('aria-current');
-      active = (index + slides.length) % slides.length;
-      slides[active].hidden = false;
-      dots[active].setAttribute('aria-current', 'true');
-      slides[(active + 1) % slides.length].querySelector('img').loading = 'eager';
+  searchInput.value = query;
+  for (const link of $$('[data-collection]')) {
+    if (link.dataset.collection !== activeCollection) {
+      link.removeAttribute('aria-current');
+      continue;
     }
-
-    function scheduleSlide() {
-      clearTimeout(timer);
-      if (paused || document.hidden) return;
-      timer = setTimeout(() => {
-        if (!track.matches(':hover, :focus-within') && !$('dialog[open]')) showSlide(active + 1);
-        scheduleSlide();
-      }, 5500);
+    link.setAttribute('aria-current', 'page');
+    if (activeCollection) {
+      const title = link.textContent.trim();
+      $('#collection-title').textContent = title;
+      document.title = title + ' | Tehran Shop';
     }
-
-    function updatePlaybackButton() {
-      const label = paused ? 'شروع پخش خودکار' : 'توقف پخش خودکار';
-      toggle.setAttribute('aria-label', label);
-      toggle.title = label;
-      toggle.querySelector('use').setAttribute('href', paused ? '#i-play' : '#i-pause');
-    }
-
-    carousel.addEventListener('click', event => {
-      const button = event.target.closest('button');
-      if (!button) return;
-      if (button.hasAttribute('data-slide-next')) showSlide(active + 1);
-      if (button.hasAttribute('data-slide-previous')) showSlide(active - 1);
-      if (button.hasAttribute('data-slide-to')) showSlide(Number(button.dataset.slideTo));
-      if (button === toggle) {
-        paused = !paused;
-        updatePlaybackButton();
-      }
-      scheduleSlide();
-    });
-
-    slides[1].querySelector('img').loading = 'eager';
-    document.addEventListener('visibilitychange', scheduleSlide);
-    updatePlaybackButton();
-    scheduleSlide();
   }
-
-  initCarousel();
-
+  if (grid && defaultSort === 'newest') {
+    $('#sort-select').value = defaultSort;
+    sortProducts(defaultSort);
+  }
   renderProducts();
   updateThemeButtons();
   cartReady = syncCart();

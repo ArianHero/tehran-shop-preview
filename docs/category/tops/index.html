@@ -16,14 +16,16 @@
   <link rel="icon" href="../../static/store/assets/tehran-shop-icon.png" type="image/png">
   <link rel="preload" href="../../static/store/assets/vazirmatn.woff2" as="font" type="font/woff2" crossorigin>
   
-  <link rel="stylesheet" href="../../static/store/style.css?v=4">
-  <script src="../../static/store/app.js?v=4" defer></script>
+  <link rel="stylesheet" href="../../static/store/style.css?v=7">
+  
+  <script src="../../static/store/app.js?v=7" defer></script>
 </head>
 <body class="page-category" id="top">
 <svg class="svg-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
   <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M19 12H5m6-6-6 6 6 6"/></symbol>
   <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12"/></symbol>
   <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></symbol>
+  <symbol id="i-filter" viewBox="0 0 24 24"><path d="M4 6h7m4 0h5M4 12h3m4 0h9M4 18h10m4 0h2M11 4v4M7 10v4m7 2v4"/></symbol>
   <symbol id="i-bag" viewBox="0 0 24 24"><path d="M5 7h14l1 14H4L5 7Zm3 0V6a4 4 0 0 1 8 0v1"/></symbol>
   <symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 5v14m6-14v14"/></symbol>
   <symbol id="i-play" viewBox="0 0 24 24"><path d="m8 5 11 7-11 7Z"/></symbol>
@@ -34,6 +36,7 @@
   <symbol id="i-ruler" viewBox="0 0 24 24"><path d="m3 15 12-12 6 6L9 21l-6-6Zm9-9 3 3M9 9l2 2m-5 1 3 3"/></symbol>
   <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
   <symbol id="i-insta" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M7 3H4a1 1 0 0 0-1 1c0 9.4 7.6 17 17 17a1 1 0 0 0 1-1v-3l-4.4-2-1.7 1.7a14 14 0 0 1-7.6-7.6L9 7.4 7 3Z"/></symbol>
   <symbol id="i-location" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></symbol>
   <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
   <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7m4-7v7"/></symbol>
@@ -50,7 +53,17 @@
   <span class="brand-text" dir="ltr">TEHRAN <span>SHOP</span><small>Sport clothes</small></span>
 </a>
 
-    <div class="header-navigation">
+    <form class="site-search" action="../../shop/index.html" method="get" role="search">
+      <input id="search-input" name="q" type="search" placeholder="جستجوی نام محصول یا دسته‌بندی" aria-label="جستجوی محصولات" maxlength="120">
+      <button type="submit" aria-label="جستجو"><svg aria-hidden="true"><use href="#i-search"/></svg><span>جستجو</span></button>
+    </form>
+    <div class="header-actions">
+      <button type="button" class="icon-button theme-toggle" data-theme-toggle aria-label="فعال کردن حالت تیره" title="حالت تیره"><svg aria-hidden="true"><use href="#i-moon"/></svg></button>
+      <button type="button" class="cart-trigger" id="cart-toggle" aria-label="باز کردن سبد خرید"><svg aria-hidden="true"><use href="#i-bag"/></svg><span class="cart-label">سبد خرید</span><span id="cart-count" class="cart-count">۰</span></button>
+    </div>
+  </div>
+  <div class="navigation-band">
+    <div class="wrap header-navigation">
       <details class="category-menu" id="category-menu">
         <summary aria-label="دسته‌بندی‌ها">
           <svg aria-hidden="true"><use href="#i-menu"/></svg>
@@ -58,7 +71,7 @@
           <svg class="category-chevron" aria-hidden="true"><use href="#i-chevron"/></svg>
         </summary>
         <div class="category-panel">
-          <nav class="mobile-shop-links" aria-label="منوی فروشگاه">
+          <nav class="menu-shop-links" aria-label="منوی فروشگاه">
             <a href="../../shop/index.html">فروشگاه</a>
 <a href="../../index.html#new-collection">جدیدترین‌ها</a>
 <a href="../../index.html#popular">پرطرفدارها</a>
@@ -111,19 +124,32 @@
           </nav>
         </div>
       </details>
-      <nav class="desktop-nav" aria-label="منوی فروشگاه">
-        <a href="../../shop/index.html">فروشگاه</a>
-<a href="../../index.html#new-collection">جدیدترین‌ها</a>
-<a href="../../index.html#popular">پرطرفدارها</a>
-<a class="sale-nav-link" href="../../index.html#sale">حراج</a>
-<a href="../../contact/index.html">ارتباط با ما</a>
-
+      <nav class="top-categories" aria-label="دسته‌بندی‌های بالای صفحه">
+        
+        <a href="../../category/socks/index.html">جوراب</a>
+        
+        <a href="../../category/tops/index.html" aria-current="page">تی‌شرت</a>
+        
+        <a href="../../category/sweatshirts/index.html">دورس</a>
+        
+        <a href="../../category/hoodies/index.html">هودی</a>
+        
+        <a href="../../category/compression/index.html">کشاله</a>
+        
+        <a href="../../category/pants/index.html">شلوار</a>
+        
+        <a href="../../category/jerseys/index.html">جرزی</a>
+        
+        <a href="../../category/tanks/index.html">رکابی</a>
+        
+        <a href="../../category/zip-jackets/index.html">سوئیشرت</a>
+        
+        <a href="../../category/wristbands/index.html">دستبند</a>
+        
       </nav>
-    </div>
-    <div class="header-actions">
-      <button type="button" class="icon-button" id="search-toggle" aria-label="جستجوی محصولات" aria-controls="search-panel" aria-expanded="false"><svg aria-hidden="true"><use href="#i-search"/></svg></button>
-      <button type="button" class="icon-button theme-toggle" data-theme-toggle aria-label="فعال کردن حالت تیره" title="حالت تیره"><svg aria-hidden="true"><use href="#i-moon"/></svg></button>
-      <button type="button" class="cart-trigger" id="cart-toggle" aria-label="باز کردن سبد خرید"><svg aria-hidden="true"><use href="#i-bag"/></svg><span class="cart-label">سبد خرید</span><span id="cart-count" class="cart-count">۰</span></button>
+      <a class="header-contact" href="../../contact/index.html" aria-label="ارتباط با ما">
+        <svg aria-hidden="true"><use href="#i-phone"/></svg><span>ارتباط با ما</span>
+      </a>
     </div>
   </div>
 </header>
@@ -151,31 +177,46 @@
       
 
 <div class="catalog-toolbar">
-  <div class="size-filters" role="group" aria-label="فیلتر سایز">
-    <span>سایز</span>
-    <button type="button" class="filter-chip" data-filter-size="" aria-pressed="true">همه</button>
-    <button type="button" class="filter-chip" data-filter-size="S" aria-pressed="false" dir="ltr">S</button><button type="button" class="filter-chip" data-filter-size="M" aria-pressed="false" dir="ltr">M</button><button type="button" class="filter-chip" data-filter-size="L" aria-pressed="false" dir="ltr">L</button><button type="button" class="filter-chip" data-filter-size="XL" aria-pressed="false" dir="ltr">XL</button>
+  <div class="catalog-topline">
+    <button type="button" class="filter-toggle" id="filter-toggle" aria-expanded="false" aria-controls="catalog-filters">
+      <svg aria-hidden="true"><use href="#i-filter"/></svg> فیلترها <span class="filter-count" id="filter-count" hidden></span>
+    </button>
+    <span id="result-count" role="status">۱ مدل</span>
+    <label class="catalog-sort"><span>مرتب‌سازی</span>
+      <select id="sort-select" aria-label="مرتب‌سازی">
+        <option value="featured">پیشنهادی</option>
+        <option value="newest">جدیدترین</option>
+        <option value="price-asc">ارزان‌ترین</option>
+        <option value="price-desc">گران‌ترین</option>
+        <option value="name">نام محصول</option>
+      </select>
+    </label>
   </div>
-  <label class="sort-control"><span>مرتب‌سازی</span>
-    <select id="sort-select" aria-label="مرتب‌سازی محصولات">
-      <option value="featured">پیشنهادی</option>
-      <option value="price-asc">ارزان‌ترین</option>
-      <option value="price-desc">گران‌ترین</option>
-      <option value="name">نام محصول</option>
-    </select>
-    <svg aria-hidden="true"><use href="#i-chevron"/></svg>
-  </label>
+  <div class="filter-panel" id="catalog-filters" aria-labelledby="filter-title" hidden>
+    <div class="filter-heading">
+      <h2 id="filter-title">فیلتر محصولات</h2>
+      <button type="button" class="text-link" id="reset-filters">پاک کردن فیلترها</button>
+    </div>
+    <div class="filter-fields">
+      
+      <label>سایز
+        <select id="filter-size">
+          <option value="">همه سایزها</option>
+          <option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option><option value="XXL">XXL</option><option value="۳۹–۴۴">۳۹–۴۴</option><option value="فری‌سایز">فری‌سایز</option>
+        </select>
+      </label>
+      <label>کمترین قیمت (تومان)
+        <input id="filter-min" inputmode="numeric" maxlength="18" dir="ltr" placeholder="۰" aria-describedby="filter-error">
+      </label>
+      <label>بیشترین قیمت (تومان)
+        <input id="filter-max" inputmode="numeric" maxlength="18" dir="ltr" placeholder="بدون سقف" aria-describedby="filter-error">
+      </label>
+    </div>
+    <label class="sale-filter"><input type="checkbox" id="filter-sale"> فقط حراج</label>
+    <p class="filter-error" id="filter-error" role="status" hidden>بازهٔ قیمت را با عدد وارد کنید. بیشترین قیمت باید برابر یا بیشتر از کمترین قیمت باشد.</p>
+  </div>
 </div>
-
-<form class="search-panel" id="search-panel" role="search" hidden>
-  <svg aria-hidden="true"><use href="#i-search"/></svg>
-  <input id="search-input" type="search" placeholder="نام محصول یا دسته‌بندی" aria-label="جستجو در همه محصولات" autocomplete="off">
-  <button class="icon-button" id="search-clear" type="button" aria-label="بستن جستجو"><svg aria-hidden="true"><use href="#i-close"/></svg></button>
-</form>
-<div class="results-line">
-  <span id="result-count" role="status">۱ مدل</span>
-  <div class="active-filters" id="active-filters" hidden><span id="filter-description"></span><button type="button" id="reset-filters">پاک کردن فیلترها <span aria-hidden="true">×</span></button></div>
-</div>
+<p class="filter-description" id="filter-description" hidden></p>
 <div id="product-grid" class="product-grid">
   
   <article class="product-card" data-product-id="1" hidden>
@@ -185,6 +226,7 @@
     </button>
     <div class="product-badges">
       
+
 <span class="product-tag product-tag--new">کالکشن جدید</span>
 
 <span class="product-tag product-tag--popular">پرطرفدار</span>
@@ -193,6 +235,7 @@
     </div>
     <button type="button" class="quick-add" data-open-product="1" aria-label="انتخاب سایز ست بسکتبال لیکرز ۲۴">
       <svg aria-hidden="true"><use href="#i-plus"/></svg>
+      <span>انتخاب سایز</span>
     </button>
   </div>
   <div class="product-info">
@@ -220,12 +263,14 @@
     </button>
     <div class="product-badges">
       
+
 <span class="product-tag product-tag--new">کالکشن جدید</span>
 
 
     </div>
     <button type="button" class="quick-add" data-open-product="2" aria-label="انتخاب سایز هودی ورزشی زرد">
       <svg aria-hidden="true"><use href="#i-plus"/></svg>
+      <span>انتخاب سایز</span>
     </button>
   </div>
   <div class="product-info">
@@ -253,12 +298,14 @@
     </button>
     <div class="product-badges">
       
+
 <span class="product-tag product-tag--new">کالکشن جدید</span>
 
 
     </div>
     <button type="button" class="quick-add" data-open-product="3" aria-label="انتخاب سایز دورس زغالی یقه‌گرد">
       <svg aria-hidden="true"><use href="#i-plus"/></svg>
+      <span>انتخاب سایز</span>
     </button>
   </div>
   <div class="product-info">
@@ -286,16 +333,18 @@
     </button>
     <div class="product-badges">
       
+
 <span class="product-tag product-tag--new">کالکشن جدید</span>
 
 <span class="product-tag product-tag--popular">پرطرفدار</span>
 
-<span class="product-tag product-tag--sale">حراج</span>
+<span class="product-tag product-tag--sale">۱۸٪ تخفیف</span>
 
 
     </div>
     <button type="button" class="quick-add" data-open-product="4" aria-label="انتخاب سایز تی‌شرت ورزشی طوسی">
       <svg aria-hidden="true"><use href="#i-plus"/></svg>
+      <span>انتخاب سایز</span>
     </button>
   </div>
   <div class="product-info">
@@ -323,12 +372,14 @@
     </button>
     <div class="product-badges">
       
-<span class="product-tag product-tag--sale">حراج</span>
+
+<span class="product-tag product-tag--sale">۲۱٪ تخفیف</span>
 
 
     </div>
     <button type="button" class="quick-add" data-open-product="5" aria-label="انتخاب سایز سوئیشرت زیپ‌دار زغالی">
       <svg aria-hidden="true"><use href="#i-plus"/></svg>
+      <span>انتخاب سایز</span>
     </button>
   </div>
   <div class="product-info">
@@ -356,12 +407,14 @@
     </button>
     <div class="product-badges">
       
-<span class="product-tag product-tag--sale">حراج</span>
+
+<span class="product-tag product-tag--sale">۲۱٪ تخفیف</span>
 
 
     </div>
     <button type="button" class="quick-add" data-open-product="6" aria-label="انتخاب سایز شلوار ورزشی سرمه‌ای">
       <svg aria-hidden="true"><use href="#i-plus"/></svg>
+      <span>انتخاب سایز</span>
     </button>
   </div>
   <div class="product-info">
@@ -390,9 +443,11 @@
     <div class="product-badges">
       
 
+
     </div>
     <button type="button" class="quick-add" data-open-product="7" aria-label="انتخاب سایز کشاله ورزشی مشکی">
       <svg aria-hidden="true"><use href="#i-plus"/></svg>
+      <span>انتخاب سایز</span>
     </button>
   </div>
   <div class="product-info">
@@ -420,12 +475,14 @@
     </button>
     <div class="product-badges">
       
-<span class="product-tag product-tag--sale">حراج</span>
+
+<span class="product-tag product-tag--sale">۲۱٪ تخفیف</span>
 
 
     </div>
     <button type="button" class="quick-add" data-open-product="8" aria-label="انتخاب سایز جوراب ورزشی نیم‌ساق">
       <svg aria-hidden="true"><use href="#i-plus"/></svg>
+      <span>انتخاب سایز</span>
     </button>
   </div>
   <div class="product-info">
@@ -453,12 +510,14 @@
     </button>
     <div class="product-badges">
       
+
 <span class="product-tag product-tag--popular">پرطرفدار</span>
 
 
     </div>
     <button type="button" class="quick-add" data-open-product="9" aria-label="انتخاب سایز رکابی تمرینی مشکی">
       <svg aria-hidden="true"><use href="#i-plus"/></svg>
+      <span>انتخاب سایز</span>
     </button>
   </div>
   <div class="product-info">
@@ -486,12 +545,14 @@
     </button>
     <div class="product-badges">
       
+
 <span class="product-tag product-tag--popular">پرطرفدار</span>
 
 
     </div>
     <button type="button" class="quick-add" data-open-product="10" aria-label="انتخاب سایز مچ‌بند کشی مشکی">
       <svg aria-hidden="true"><use href="#i-plus"/></svg>
+      <span>انتخاب سایز</span>
     </button>
   </div>
   <div class="product-info">
@@ -632,6 +693,6 @@
 <div class="toast" id="toast" role="status" hidden><svg aria-hidden="true"><use href="#i-check"/></svg><span></span></div>
 
 <noscript><p class="no-script">برای انتخاب سایز و استفاده از سبد خرید، جاوااسکریپت را فعال کنید.</p></noscript>
-<script id="runtime-data" type="application/json">{"backend": false, "products": [{"id": 1, "name": "\u0633\u062a \u0628\u0633\u06a9\u062a\u0628\u0627\u0644 \u0644\u06cc\u06a9\u0631\u0632 \u06f2\u06f4", "slug": "shayan-demo-jersey", "english": "", "category": "jerseys", "category_name": "\u062c\u0631\u0632\u06cc", "description": "\u062c\u0631\u0632\u06cc \u0634\u0645\u0627\u0631\u0647\u0654 \u06f2\u06f4 \u0628\u0627 \u0634\u0644\u0648\u0627\u0631\u06a9 \u0647\u0645\u200c\u0631\u0646\u06af.", "price": 1490000, "regular_price": 1490000, "sale_price": null, "tag": "new", "badge": "\u06a9\u0627\u0644\u06a9\u0634\u0646 \u062c\u062f\u06cc\u062f", "badges": [{"tag": "new", "label": "\u06a9\u0627\u0644\u06a9\u0634\u0646 \u062c\u062f\u06cc\u062f"}, {"tag": "popular", "label": "\u067e\u0631\u0637\u0631\u0641\u062f\u0627\u0631"}], "is_popular": true, "is_new_collection": true, "show_in_slider": true, "image": "../../static/store/assets/shayan-demo-jersey.webp", "images": ["../../static/store/assets/shayan-demo-jersey.webp"], "sizes": ["M", "L", "XL", "XXL"], "colors": [{"name": "\u0642\u0631\u0645\u0632", "hex": "#a9232c"}], "demo": true}, {"id": 2, "name": "\u0647\u0648\u062f\u06cc \u0648\u0631\u0632\u0634\u06cc \u0632\u0631\u062f", "slug": "shayan-demo-hoodie", "english": "", "category": "hoodies", "category_name": "\u0647\u0648\u062f\u06cc", "description": "\u0647\u0648\u062f\u06cc \u062c\u0644\u0648 \u0628\u0633\u062a\u0647 \u0628\u0627 \u0628\u0646\u062f \u06a9\u0644\u0627\u0647 \u0648 \u062c\u06cc\u0628 \u062c\u0644\u0648.", "price": 1690000, "regular_price": 1690000, "sale_price": null, "tag": "new", "badge": "\u06a9\u0627\u0644\u06a9\u0634\u0646 \u062c\u062f\u06cc\u062f", "badges": [{"tag": "new", "label": "\u06a9\u0627\u0644\u06a9\u0634\u0646 \u062c\u062f\u06cc\u062f"}], "is_popular": false, "is_new_collection": true, "show_in_slider": true, "image": "../../static/store/assets/shayan-demo-hoodie.webp", "images": ["../../static/store/assets/shayan-demo-hoodie.webp"], "sizes": ["S", "M", "L", "XL"], "colors": [{"name": "\u0632\u0631\u062f", "hex": "#d5aa24"}], "demo": true}, {"id": 3, "name": "\u062f\u0648\u0631\u0633 \u0632\u063a\u0627\u0644\u06cc \u06cc\u0642\u0647\u200c\u06af\u0631\u062f", "slug": "shayan-demo-sweatshirt", "english": "", "category": "sweatshirts", "category_name": "\u062f\u0648\u0631\u0633", "description": "\u062f\u0648\u0631\u0633 \u0628\u062f\u0648\u0646 \u06a9\u0644\u0627\u0647 \u0628\u0627 \u06cc\u0642\u0647\u0654 \u06af\u0631\u062f \u0648 \u0622\u0633\u062a\u06cc\u0646 \u0645\u0634\u06a9\u06cc.", "price": 1490000, "regular_price": 1490000, "sale_price": null, "tag": "new", "badge": "\u06a9\u0627\u0644\u06a9\u0634\u0646 \u062c\u062f\u06cc\u062f", "badges": [{"tag": "new", "label": "\u06a9\u0627\u0644\u06a9\u0634\u0646 \u062c\u062f\u06cc\u062f"}], "is_popular": false, "is_new_collection": true, "show_in_slider": true, "image": "../../static/store/assets/shayan-demo-sweatshirt.webp", "images": ["../../static/store/assets/shayan-demo-sweatshirt.webp"], "sizes": ["S", "M", "L", "XL"], "colors": [{"name": "\u0632\u063a\u0627\u0644\u06cc", "hex": "#35373a"}], "demo": true}, {"id": 4, "name": "\u062a\u06cc\u200c\u0634\u0631\u062a \u0648\u0631\u0632\u0634\u06cc \u0637\u0648\u0633\u06cc", "slug": "shayan-demo-tee", "english": "", "category": "tops", "category_name": "\u062a\u06cc\u200c\u0634\u0631\u062a", "description": "\u062a\u06cc\u200c\u0634\u0631\u062a \u0622\u0633\u062a\u06cc\u0646\u200c\u06a9\u0648\u062a\u0627\u0647 \u0648 \u06cc\u0642\u0647\u200c\u06af\u0631\u062f \u0628\u0631\u0627\u06cc \u062a\u0645\u0631\u06cc\u0646.", "price": 640000, "regular_price": 790000, "sale_price": 640000, "tag": "new", "badge": "\u06a9\u0627\u0644\u06a9\u0634\u0646 \u062c\u062f\u06cc\u062f", "badges": [{"tag": "new", "label": "\u06a9\u0627\u0644\u06a9\u0634\u0646 \u062c\u062f\u06cc\u062f"}, {"tag": "popular", "label": "\u067e\u0631\u0637\u0631\u0641\u062f\u0627\u0631"}, {"tag": "sale", "label": "\u062d\u0631\u0627\u062c"}], "is_popular": true, "is_new_collection": true, "show_in_slider": false, "image": "../../static/store/assets/shayan-demo-tee.webp", "images": ["../../static/store/assets/shayan-demo-tee.webp"], "sizes": ["S", "M", "L", "XL"], "colors": [{"name": "\u0637\u0648\u0633\u06cc", "hex": "#555359"}], "demo": true}, {"id": 5, "name": "\u0633\u0648\u0626\u06cc\u0634\u0631\u062a \u0632\u06cc\u067e\u200c\u062f\u0627\u0631 \u0632\u063a\u0627\u0644\u06cc", "slug": "shayan-demo-zip-jacket", "english": "", "category": "zip-jackets", "category_name": "\u0633\u0648\u0626\u06cc\u0634\u0631\u062a", "description": "\u0633\u0648\u0626\u06cc\u0634\u0631\u062a \u06a9\u0644\u0627\u0647\u200c\u062f\u0627\u0631 \u0628\u0627 \u0632\u06cc\u067e \u0633\u0631\u062a\u0627\u0633\u0631\u06cc \u0648 \u062f\u0648 \u062c\u06cc\u0628 \u062c\u0644\u0648.", "price": 1790000, "regular_price": 2290000, "sale_price": 1790000, "tag": "sale", "badge": "\u062d\u0631\u0627\u062c", "badges": [{"tag": "sale", "label": "\u062d\u0631\u0627\u062c"}], "is_popular": false, "is_new_collection": false, "show_in_slider": false, "image": "../../static/store/assets/shayan-demo-zip-jacket.webp", "images": ["../../static/store/assets/shayan-demo-zip-jacket.webp"], "sizes": ["M", "L", "XL"], "colors": [{"name": "\u0632\u063a\u0627\u0644\u06cc", "hex": "#3a3a39"}], "demo": true}, {"id": 6, "name": "\u0634\u0644\u0648\u0627\u0631 \u0648\u0631\u0632\u0634\u06cc \u0633\u0631\u0645\u0647\u200c\u0627\u06cc", "slug": "shayan-demo-pants", "english": "", "category": "pants", "category_name": "\u0634\u0644\u0648\u0627\u0631", "description": "\u0634\u0644\u0648\u0627\u0631 \u0648\u0631\u0632\u0634\u06cc \u0633\u0631\u0645\u0647\u200c\u0627\u06cc \u0628\u0627 \u06a9\u0645\u0631 \u06a9\u0634\u06cc.", "price": 1090000, "regular_price": 1390000, "sale_price": 1090000, "tag": "sale", "badge": "\u062d\u0631\u0627\u062c", "badges": [{"tag": "sale", "label": "\u062d\u0631\u0627\u062c"}], "is_popular": false, "is_new_collection": false, "show_in_slider": false, "image": "../../static/store/assets/shayan-demo-pants.webp", "images": ["../../static/store/assets/shayan-demo-pants.webp"], "sizes": ["M", "L", "XL"], "colors": [{"name": "\u0633\u0631\u0645\u0647\u200c\u0627\u06cc", "hex": "#23314e"}], "demo": true}, {"id": 7, "name": "\u06a9\u0634\u0627\u0644\u0647 \u0648\u0631\u0632\u0634\u06cc \u0645\u0634\u06a9\u06cc", "slug": "shayan-demo-compression", "english": "", "category": "compression", "category_name": "\u06a9\u0634\u0627\u0644\u0647", "description": "\u0634\u0648\u0631\u062a \u062c\u0630\u0628 \u0648\u0631\u0632\u0634\u06cc \u0628\u0631\u0627\u06cc \u067e\u0648\u0634\u06cc\u062f\u0646 \u0632\u06cc\u0631 \u0634\u0644\u0648\u0627\u0631\u06a9.", "price": 690000, "regular_price": 690000, "sale_price": null, "tag": "", "badge": "", "badges": [], "is_popular": false, "is_new_collection": false, "show_in_slider": false, "image": "../../static/store/assets/shayan-demo-compression.webp", "images": ["../../static/store/assets/shayan-demo-compression.webp"], "sizes": ["M", "L", "XL"], "colors": [{"name": "\u0645\u0634\u06a9\u06cc", "hex": "#242326"}], "demo": true}, {"id": 8, "name": "\u062c\u0648\u0631\u0627\u0628 \u0648\u0631\u0632\u0634\u06cc \u0646\u06cc\u0645\u200c\u0633\u0627\u0642", "slug": "shayan-demo-socks", "english": "", "category": "socks", "category_name": "\u062c\u0648\u0631\u0627\u0628", "description": "\u062c\u0648\u0631\u0627\u0628 \u0646\u06cc\u0645\u200c\u0633\u0627\u0642 \u062f\u0631 \u0631\u0646\u06af\u200c\u0647\u0627\u06cc \u0645\u0634\u06a9\u06cc\u060c \u0633\u0641\u06cc\u062f \u0648 \u0637\u0648\u0633\u06cc.", "price": 149000, "regular_price": 190000, "sale_price": 149000, "tag": "sale", "badge": "\u062d\u0631\u0627\u062c", "badges": [{"tag": "sale", "label": "\u062d\u0631\u0627\u062c"}], "is_popular": false, "is_new_collection": false, "show_in_slider": false, "image": "../../static/store/assets/shayan-demo-socks.webp", "images": ["../../static/store/assets/shayan-demo-socks.webp"], "sizes": ["\u06f3\u06f9\u2013\u06f4\u06f4"], "colors": [{"name": "\u062a\u0631\u06a9\u06cc\u0628\u06cc", "hex": "#888887"}], "demo": true}, {"id": 9, "name": "\u0631\u06a9\u0627\u0628\u06cc \u062a\u0645\u0631\u06cc\u0646\u06cc \u0645\u0634\u06a9\u06cc", "slug": "shayan-demo-tank", "english": "", "category": "tanks", "category_name": "\u0631\u06a9\u0627\u0628\u06cc", "description": "\u0631\u06a9\u0627\u0628\u06cc \u06cc\u0642\u0647\u200c\u06af\u0631\u062f \u0628\u0627 \u0628\u0631\u0634 \u0633\u0627\u062f\u0647 \u0628\u0631\u0627\u06cc \u062a\u0645\u0631\u06cc\u0646.", "price": 690000, "regular_price": 690000, "sale_price": null, "tag": "popular", "badge": "\u067e\u0631\u0637\u0631\u0641\u062f\u0627\u0631", "badges": [{"tag": "popular", "label": "\u067e\u0631\u0637\u0631\u0641\u062f\u0627\u0631"}], "is_popular": true, "is_new_collection": false, "show_in_slider": false, "image": "../../static/store/assets/shayan-demo-tank.webp", "images": ["../../static/store/assets/shayan-demo-tank.webp"], "sizes": ["S", "M", "L", "XL"], "colors": [{"name": "\u0645\u0634\u06a9\u06cc", "hex": "#252524"}], "demo": true}, {"id": 10, "name": "\u0645\u0686\u200c\u0628\u0646\u062f \u06a9\u0634\u06cc \u0645\u0634\u06a9\u06cc", "slug": "shayan-demo-wristband", "english": "", "category": "wristbands", "category_name": "\u062f\u0633\u062a\u0628\u0646\u062f", "description": "\u0645\u0686\u200c\u0628\u0646\u062f \u06a9\u0634\u06cc \u0628\u0627 \u0628\u0646\u062f \u0686\u0633\u0628\u06cc \u0628\u0631\u0627\u06cc \u062a\u0645\u0631\u06cc\u0646.", "price": 220000, "regular_price": 220000, "sale_price": null, "tag": "popular", "badge": "\u067e\u0631\u0637\u0631\u0641\u062f\u0627\u0631", "badges": [{"tag": "popular", "label": "\u067e\u0631\u0637\u0631\u0641\u062f\u0627\u0631"}], "is_popular": true, "is_new_collection": false, "show_in_slider": false, "image": "../../static/store/assets/shayan-demo-wristband.webp", "images": ["../../static/store/assets/shayan-demo-wristband.webp"], "sizes": ["\u0641\u0631\u06cc\u200c\u0633\u0627\u06cc\u0632"], "colors": [{"name": "\u0645\u0634\u06a9\u06cc", "hex": "#2b2726"}], "demo": true}], "page": "category", "category": "tops", "visible_ids": [4], "cart_url": null, "contact_url": "../../contact/index.html"}</script>
+<script id="runtime-data" type="application/json">{"backend": false, "products": [{"id": 1, "name": "\u0633\u062a \u0628\u0633\u06a9\u062a\u0628\u0627\u0644 \u0644\u06cc\u06a9\u0631\u0632 \u06f2\u06f4", "slug": "shayan-demo-jersey", "english": "", "category": "jerseys", "category_name": "\u062c\u0631\u0632\u06cc", "description": "\u062c\u0631\u0632\u06cc \u0634\u0645\u0627\u0631\u0647\u0654 \u06f2\u06f4 \u0628\u0627 \u0634\u0644\u0648\u0627\u0631\u06a9 \u0647\u0645\u200c\u0631\u0646\u06af.", "price": 1490000, "regular_price": 1490000, "sale_price": null, "discount_percent": 0, "tag": "new", "badge": "\u06a9\u0627\u0644\u06a9\u0634\u0646 \u062c\u062f\u06cc\u062f", "badges": [{"tag": "new", "label": "\u06a9\u0627\u0644\u06a9\u0634\u0646 \u062c\u062f\u06cc\u062f"}, {"tag": "popular", "label": "\u067e\u0631\u0637\u0631\u0641\u062f\u0627\u0631"}], "is_popular": true, "is_new_collection": true, "show_in_slider": true, "position": 0, "image": "../../static/store/assets/shayan-demo-jersey.webp", "images": ["../../static/store/assets/shayan-demo-jersey.webp"], "sizes": ["M", "L", "XL", "XXL"], "colors": [{"name": "\u0642\u0631\u0645\u0632", "hex": "#a9232c"}], "demo": true}, {"id": 2, "name": "\u0647\u0648\u062f\u06cc \u0648\u0631\u0632\u0634\u06cc \u0632\u0631\u062f", "slug": "shayan-demo-hoodie", "english": "", "category": "hoodies", "category_name": "\u0647\u0648\u062f\u06cc", "description": "\u0647\u0648\u062f\u06cc \u062c\u0644\u0648 \u0628\u0633\u062a\u0647 \u0628\u0627 \u0628\u0646\u062f \u06a9\u0644\u0627\u0647 \u0648 \u062c\u06cc\u0628 \u062c\u0644\u0648.", "price": 1690000, "regular_price": 1690000, "sale_price": null, "discount_percent": 0, "tag": "new", "badge": "\u06a9\u0627\u0644\u06a9\u0634\u0646 \u062c\u062f\u06cc\u062f", "badges": [{"tag": "new", "label": "\u06a9\u0627\u0644\u06a9\u0634\u0646 \u062c\u062f\u06cc\u062f"}], "is_popular": false, "is_new_collection": true, "show_in_slider": true, "position": 1, "image": "../../static/store/assets/shayan-demo-hoodie.webp", "images": ["../../static/store/assets/shayan-demo-hoodie.webp"], "sizes": ["S", "M", "L", "XL"], "colors": [{"name": "\u0632\u0631\u062f", "hex": "#d5aa24"}], "demo": true}, {"id": 3, "name": "\u062f\u0648\u0631\u0633 \u0632\u063a\u0627\u0644\u06cc \u06cc\u0642\u0647\u200c\u06af\u0631\u062f", "slug": "shayan-demo-sweatshirt", "english": "", "category": "sweatshirts", "category_name": "\u062f\u0648\u0631\u0633", "description": "\u062f\u0648\u0631\u0633 \u0628\u062f\u0648\u0646 \u06a9\u0644\u0627\u0647 \u0628\u0627 \u06cc\u0642\u0647\u0654 \u06af\u0631\u062f \u0648 \u0622\u0633\u062a\u06cc\u0646 \u0645\u0634\u06a9\u06cc.", "price": 1490000, "regular_price": 1490000, "sale_price": null, "discount_percent": 0, "tag": "new", "badge": "\u06a9\u0627\u0644\u06a9\u0634\u0646 \u062c\u062f\u06cc\u062f", "badges": [{"tag": "new", "label": "\u06a9\u0627\u0644\u06a9\u0634\u0646 \u062c\u062f\u06cc\u062f"}], "is_popular": false, "is_new_collection": true, "show_in_slider": true, "position": 2, "image": "../../static/store/assets/shayan-demo-sweatshirt.webp", "images": ["../../static/store/assets/shayan-demo-sweatshirt.webp"], "sizes": ["S", "M", "L", "XL"], "colors": [{"name": "\u0632\u063a\u0627\u0644\u06cc", "hex": "#35373a"}], "demo": true}, {"id": 4, "name": "\u062a\u06cc\u200c\u0634\u0631\u062a \u0648\u0631\u0632\u0634\u06cc \u0637\u0648\u0633\u06cc", "slug": "shayan-demo-tee", "english": "", "category": "tops", "category_name": "\u062a\u06cc\u200c\u0634\u0631\u062a", "description": "\u062a\u06cc\u200c\u0634\u0631\u062a \u0622\u0633\u062a\u06cc\u0646\u200c\u06a9\u0648\u062a\u0627\u0647 \u0648 \u06cc\u0642\u0647\u200c\u06af\u0631\u062f \u0628\u0631\u0627\u06cc \u062a\u0645\u0631\u06cc\u0646.", "price": 640000, "regular_price": 790000, "sale_price": 640000, "discount_percent": 18, "tag": "new", "badge": "\u06a9\u0627\u0644\u06a9\u0634\u0646 \u062c\u062f\u06cc\u062f", "badges": [{"tag": "new", "label": "\u06a9\u0627\u0644\u06a9\u0634\u0646 \u062c\u062f\u06cc\u062f"}, {"tag": "popular", "label": "\u067e\u0631\u0637\u0631\u0641\u062f\u0627\u0631"}, {"tag": "sale", "label": "\u062d\u0631\u0627\u062c"}], "is_popular": true, "is_new_collection": true, "show_in_slider": false, "position": 3, "image": "../../static/store/assets/shayan-demo-tee.webp", "images": ["../../static/store/assets/shayan-demo-tee.webp"], "sizes": ["S", "M", "L", "XL"], "colors": [{"name": "\u0637\u0648\u0633\u06cc", "hex": "#555359"}], "demo": true}, {"id": 5, "name": "\u0633\u0648\u0626\u06cc\u0634\u0631\u062a \u0632\u06cc\u067e\u200c\u062f\u0627\u0631 \u0632\u063a\u0627\u0644\u06cc", "slug": "shayan-demo-zip-jacket", "english": "", "category": "zip-jackets", "category_name": "\u0633\u0648\u0626\u06cc\u0634\u0631\u062a", "description": "\u0633\u0648\u0626\u06cc\u0634\u0631\u062a \u06a9\u0644\u0627\u0647\u200c\u062f\u0627\u0631 \u0628\u0627 \u0632\u06cc\u067e \u0633\u0631\u062a\u0627\u0633\u0631\u06cc \u0648 \u062f\u0648 \u062c\u06cc\u0628 \u062c\u0644\u0648.", "price": 1790000, "regular_price": 2290000, "sale_price": 1790000, "discount_percent": 21, "tag": "sale", "badge": "\u062d\u0631\u0627\u062c", "badges": [{"tag": "sale", "label": "\u062d\u0631\u0627\u062c"}], "is_popular": false, "is_new_collection": false, "show_in_slider": false, "position": 4, "image": "../../static/store/assets/shayan-demo-zip-jacket.webp", "images": ["../../static/store/assets/shayan-demo-zip-jacket.webp"], "sizes": ["M", "L", "XL"], "colors": [{"name": "\u0632\u063a\u0627\u0644\u06cc", "hex": "#3a3a39"}], "demo": true}, {"id": 6, "name": "\u0634\u0644\u0648\u0627\u0631 \u0648\u0631\u0632\u0634\u06cc \u0633\u0631\u0645\u0647\u200c\u0627\u06cc", "slug": "shayan-demo-pants", "english": "", "category": "pants", "category_name": "\u0634\u0644\u0648\u0627\u0631", "description": "\u0634\u0644\u0648\u0627\u0631 \u0648\u0631\u0632\u0634\u06cc \u0633\u0631\u0645\u0647\u200c\u0627\u06cc \u0628\u0627 \u06a9\u0645\u0631 \u06a9\u0634\u06cc.", "price": 1090000, "regular_price": 1390000, "sale_price": 1090000, "discount_percent": 21, "tag": "sale", "badge": "\u062d\u0631\u0627\u062c", "badges": [{"tag": "sale", "label": "\u062d\u0631\u0627\u062c"}], "is_popular": false, "is_new_collection": false, "show_in_slider": false, "position": 5, "image": "../../static/store/assets/shayan-demo-pants.webp", "images": ["../../static/store/assets/shayan-demo-pants.webp"], "sizes": ["M", "L", "XL"], "colors": [{"name": "\u0633\u0631\u0645\u0647\u200c\u0627\u06cc", "hex": "#23314e"}], "demo": true}, {"id": 7, "name": "\u06a9\u0634\u0627\u0644\u0647 \u0648\u0631\u0632\u0634\u06cc \u0645\u0634\u06a9\u06cc", "slug": "shayan-demo-compression", "english": "", "category": "compression", "category_name": "\u06a9\u0634\u0627\u0644\u0647", "description": "\u0634\u0648\u0631\u062a \u062c\u0630\u0628 \u0648\u0631\u0632\u0634\u06cc \u0628\u0631\u0627\u06cc \u067e\u0648\u0634\u06cc\u062f\u0646 \u0632\u06cc\u0631 \u0634\u0644\u0648\u0627\u0631\u06a9.", "price": 690000, "regular_price": 690000, "sale_price": null, "discount_percent": 0, "tag": "", "badge": "", "badges": [], "is_popular": false, "is_new_collection": false, "show_in_slider": false, "position": 6, "image": "../../static/store/assets/shayan-demo-compression.webp", "images": ["../../static/store/assets/shayan-demo-compression.webp"], "sizes": ["M", "L", "XL"], "colors": [{"name": "\u0645\u0634\u06a9\u06cc", "hex": "#242326"}], "demo": true}, {"id": 8, "name": "\u062c\u0648\u0631\u0627\u0628 \u0648\u0631\u0632\u0634\u06cc \u0646\u06cc\u0645\u200c\u0633\u0627\u0642", "slug": "shayan-demo-socks", "english": "", "category": "socks", "category_name": "\u062c\u0648\u0631\u0627\u0628", "description": "\u062c\u0648\u0631\u0627\u0628 \u0646\u06cc\u0645\u200c\u0633\u0627\u0642 \u062f\u0631 \u0631\u0646\u06af\u200c\u0647\u0627\u06cc \u0645\u0634\u06a9\u06cc\u060c \u0633\u0641\u06cc\u062f \u0648 \u0637\u0648\u0633\u06cc.", "price": 149000, "regular_price": 190000, "sale_price": 149000, "discount_percent": 21, "tag": "sale", "badge": "\u062d\u0631\u0627\u062c", "badges": [{"tag": "sale", "label": "\u062d\u0631\u0627\u062c"}], "is_popular": false, "is_new_collection": false, "show_in_slider": false, "position": 7, "image": "../../static/store/assets/shayan-demo-socks.webp", "images": ["../../static/store/assets/shayan-demo-socks.webp"], "sizes": ["\u06f3\u06f9\u2013\u06f4\u06f4"], "colors": [{"name": "\u062a\u0631\u06a9\u06cc\u0628\u06cc", "hex": "#888887"}], "demo": true}, {"id": 9, "name": "\u0631\u06a9\u0627\u0628\u06cc \u062a\u0645\u0631\u06cc\u0646\u06cc \u0645\u0634\u06a9\u06cc", "slug": "shayan-demo-tank", "english": "", "category": "tanks", "category_name": "\u0631\u06a9\u0627\u0628\u06cc", "description": "\u0631\u06a9\u0627\u0628\u06cc \u06cc\u0642\u0647\u200c\u06af\u0631\u062f \u0628\u0627 \u0628\u0631\u0634 \u0633\u0627\u062f\u0647 \u0628\u0631\u0627\u06cc \u062a\u0645\u0631\u06cc\u0646.", "price": 690000, "regular_price": 690000, "sale_price": null, "discount_percent": 0, "tag": "popular", "badge": "\u067e\u0631\u0637\u0631\u0641\u062f\u0627\u0631", "badges": [{"tag": "popular", "label": "\u067e\u0631\u0637\u0631\u0641\u062f\u0627\u0631"}], "is_popular": true, "is_new_collection": false, "show_in_slider": false, "position": 8, "image": "../../static/store/assets/shayan-demo-tank.webp", "images": ["../../static/store/assets/shayan-demo-tank.webp"], "sizes": ["S", "M", "L", "XL"], "colors": [{"name": "\u0645\u0634\u06a9\u06cc", "hex": "#252524"}], "demo": true}, {"id": 10, "name": "\u0645\u0686\u200c\u0628\u0646\u062f \u06a9\u0634\u06cc \u0645\u0634\u06a9\u06cc", "slug": "shayan-demo-wristband", "english": "", "category": "wristbands", "category_name": "\u062f\u0633\u062a\u0628\u0646\u062f", "description": "\u0645\u0686\u200c\u0628\u0646\u062f \u06a9\u0634\u06cc \u0628\u0627 \u0628\u0646\u062f \u0686\u0633\u0628\u06cc \u0628\u0631\u0627\u06cc \u062a\u0645\u0631\u06cc\u0646.", "price": 220000, "regular_price": 220000, "sale_price": null, "discount_percent": 0, "tag": "popular", "badge": "\u067e\u0631\u0637\u0631\u0641\u062f\u0627\u0631", "badges": [{"tag": "popular", "label": "\u067e\u0631\u0637\u0631\u0641\u062f\u0627\u0631"}], "is_popular": true, "is_new_collection": false, "show_in_slider": false, "position": 9, "image": "../../static/store/assets/shayan-demo-wristband.webp", "images": ["../../static/store/assets/shayan-demo-wristband.webp"], "sizes": ["\u0641\u0631\u06cc\u200c\u0633\u0627\u06cc\u0632"], "colors": [{"name": "\u0645\u0634\u06a9\u06cc", "hex": "#2b2726"}], "demo": true}], "page": "category", "category": "tops", "visible_ids": [4], "collection_ids": {}, "cart_url": null, "contact_url": "../../contact/index.html"}</script>
 </body>
 </html>
