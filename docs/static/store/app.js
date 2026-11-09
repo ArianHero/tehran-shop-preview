@@ -6,25 +6,22 @@
   const runtime = JSON.parse($('#runtime-data').textContent);
   const products = runtime.products;
   const byId = new Map(products.map(product => [product.id, product]));
-  const cards = new Map($$('.product-card').map(card => [Number(card.dataset.productId), card]));
+  const cards = new Map($$('#product-grid .product-card').map(card => [Number(card.dataset.productId), card]));
   const initialIds = new Set(runtime.visible_ids);
   const fa = new Intl.NumberFormat('fa-IR');
-  const favoritesKey = 'tehranshop:favorites:v2';
-  const cartKey = 'tehranshop:preview-cart:v2';
+  const cartKey = 'tehranshop:preview-cart:v3';
   const emptyCart = {items: [], count: 0, total: 0};
   const escaped = {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'};
   const esc = value => String(value ?? '').replace(/[&<>"']/g, character => escaped[character]);
   const icon = name => '<svg aria-hidden="true"><use href="#i-' + name + '"/></svg>';
   const money = value => fa.format(value) + ' <span class="currency">تومان</span>';
 
-  let favorites = new Set(readArray(favoritesKey).filter(id => byId.has(id)));
   let previewLines = readArray(cartKey);
   let cart = emptyCart;
   let cartReady;
   let mutating = false;
   let query = '';
   let sizeFilter = '';
-  let favoriteOnly = false;
   let selectedProduct, selectedSize, selectedColor, toastTimer;
 
   function readArray(key) {
@@ -67,25 +64,19 @@
 
   function renderProducts() {
     const term = normalize(query);
-    const globalResults = term || favoriteOnly;
     let count = 0;
 
     for (const product of products) {
-      const matchesScope = globalResults || initialIds.has(product.id);
+      const matchesScope = term || initialIds.has(product.id);
       const matchesName = !term || normalize(
         product.name + ' ' + product.english + ' ' + product.category_name
       ).includes(term);
       const matchesSize = !sizeFilter || product.sizes.includes(sizeFilter);
-      const isFavorite = favorites.has(product.id);
-      const visible = matchesScope && matchesName && matchesSize && (!favoriteOnly || isFavorite);
+      const visible = matchesScope && matchesName && matchesSize;
       const card = cards.get(product.id);
       card.hidden = !visible;
       count += Number(visible);
 
-      const favoriteButton = card.querySelector('[data-favorite]');
-      favoriteButton.setAttribute('aria-pressed', String(isFavorite));
-      const action = isFavorite ? 'حذف از' : 'افزودن به';
-      favoriteButton.setAttribute('aria-label', action + ' علاقه‌مندی‌ها، ' + product.name);
     }
 
     for (const chip of $$('[data-filter-size]')) {
@@ -94,13 +85,10 @@
 
     const activeFilters = [];
     if (query) activeFilters.push('جستجو در همه دسته‌ها «' + query + '»');
-    if (favoriteOnly) activeFilters.push('علاقه‌مندی‌ها');
     if (sizeFilter) activeFilters.push('سایز ' + sizeFilter);
 
     $('#result-count').textContent = fa.format(count) + ' مدل';
     $('#empty-results').hidden = count > 0;
-    $('#favorites-toggle').setAttribute('aria-pressed', String(favoriteOnly));
-    $('.favorite-dot').hidden = favorites.size === 0;
     $('#active-filters').hidden = activeFilters.length === 0;
     $('#filter-description').textContent = activeFilters.join(' · ');
   }
@@ -117,7 +105,6 @@
   function resetFilters() {
     query = '';
     sizeFilter = '';
-    favoriteOnly = false;
     $('#search-input').value = '';
     renderProducts();
   }
@@ -163,9 +150,9 @@
     const button = $('#add-to-cart');
     const ready = selectedSize && selectedColor && !mutating;
     button.disabled = !ready;
-    let label = 'سایز رو انتخاب کن';
+    let label = 'انتخاب سایز';
     if (mutating) label = 'در حال به‌روزرسانی…';
-    else if (ready) label = 'اضافه به سبد خرید';
+    else if (ready) label = 'افزودن به سبد خرید';
     button.innerHTML = label + ' ' + icon('bag');
   }
 
@@ -181,9 +168,15 @@
     $('#detail-image').src = product.image;
     $('#detail-image').alt = product.name;
     $('.detail-image .sample-badge').hidden = !product.demo;
-    $('#detail-english').textContent = product.english;
+    const tag = $('#detail-tag');
+    tag.textContent = product.badge;
+    tag.hidden = !product.badge;
+    tag.className = 'product-tag product-tag--' + product.tag;
     $('#product-title').textContent = product.name;
-    $('#detail-price').innerHTML = money(product.price);
+    const price = money(product.price);
+    $('#detail-price').innerHTML = product.sale_price === null ? price :
+      '<span class="price-stack"><del class="old-price">' + money(product.regular_price) +
+      '</del><span class="sale-price">' + price + '</span></span>';
     $('#detail-description').textContent = product.description;
     $('#selected-color').textContent = selectedColor || '';
     $('#detail-colors').innerHTML = product.colors.map((color, index) => {
@@ -213,7 +206,7 @@
         ...(data ? {body: JSON.stringify(data)} : {}),
       });
     } catch {
-      throw new Error('ارتباط با فروشگاه برقرار نشد. دوباره تلاش کن.');
+      throw new Error('ارتباط با فروشگاه برقرار نشد. دوباره تلاش کنید.');
     }
 
     const payload = await response.json().catch(() => ({}));
@@ -278,7 +271,7 @@
 
     if (!cart.items.length) {
       $('#cart-lines').innerHTML = '<div class="cart-empty">' + icon('bag') +
-        '<h3>سبد خرید خالیه.</h3><p>از کاتالوگ یک مدل انتخاب کن.</p>' +
+        '<h3>سبد خرید خالی است.</h3>' +
         '<button type="button" class="button button-dark" data-close-dialog="cart-dialog">بازگشت به کاتالوگ ' +
         icon('arrow') + '</button></div>';
       return;
@@ -344,22 +337,6 @@
     }
   }
 
-  $('#product-grid').addEventListener('click', event => {
-    const favorite = event.target.closest('[data-favorite]');
-    if (favorite) {
-      const id = Number(favorite.dataset.favorite);
-      if (favorites.has(id)) favorites.delete(id);
-      else favorites.add(id);
-      saveArray(favoritesKey, [...favorites]);
-      renderProducts();
-      if (favorite.closest('[hidden]')) $('#favorites-toggle').focus();
-      return;
-    }
-
-    const product = event.target.closest('[data-open-product]');
-    if (product) openProduct(Number(product.dataset.openProduct));
-  });
-
   for (const chip of $$('[data-filter-size]')) {
     chip.addEventListener('click', () => {
       sizeFilter = chip.dataset.filterSize;
@@ -370,17 +347,15 @@
   $('#sort-select')?.addEventListener('change', event => sortProducts(event.target.value));
   $('#reset-filters').addEventListener('click', resetFilters);
   $('#empty-reset').addEventListener('click', resetFilters);
-  $('#favorites-toggle').addEventListener('click', () => {
-    favoriteOnly = !favoriteOnly;
-    renderProducts();
-    $('#catalog').scrollIntoView({block: 'start'});
-  });
-
-  $('#menu-toggle').addEventListener('click', () => {
-    const open = $('#mobile-nav').hidden;
+  function setMobileMenu(open) {
     $('#mobile-nav').hidden = !open;
     $('#menu-toggle').setAttribute('aria-expanded', String(open));
     $('#menu-toggle').setAttribute('aria-label', open ? 'بستن منو' : 'باز کردن منو');
+  }
+
+  $('#menu-toggle').addEventListener('click', () => setMobileMenu($('#mobile-nav').hidden));
+  $('#mobile-nav').addEventListener('click', event => {
+    if (event.target.closest('a')) setMobileMenu(false);
   });
 
   for (const button of $$('[data-theme-toggle]')) {
@@ -446,6 +421,8 @@
   $('#detail-guide').addEventListener('click', () => showDialog('guide-dialog'));
 
   document.addEventListener('click', event => {
+    const product = event.target.closest('[data-open-product]');
+    if (product) openProduct(Number(product.dataset.openProduct));
     const close = event.target.closest('[data-close-dialog]');
     if (close) document.getElementById(close.dataset.closeDialog).close();
   });
@@ -462,6 +439,65 @@
   const syncHeader = () => $('#header').classList.toggle('scrolled', window.scrollY > 10);
   window.addEventListener('scroll', syncHeader, {passive: true});
   syncHeader();
+
+  function initCarousel() {
+    const carousel = $('[data-carousel]');
+    if (!carousel) return;
+    const slides = [...carousel.querySelectorAll('[data-slide]')];
+    if (slides.length < 2) return;
+
+    const track = carousel.querySelector('.showcase-track');
+    const dots = [...carousel.querySelectorAll('[data-slide-to]')];
+    const toggle = carousel.querySelector('[data-slide-toggle]');
+    let active = 0;
+    let timer;
+    let paused = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function showSlide(index) {
+      slides[active].hidden = true;
+      dots[active].removeAttribute('aria-current');
+      active = (index + slides.length) % slides.length;
+      slides[active].hidden = false;
+      dots[active].setAttribute('aria-current', 'true');
+      slides[(active + 1) % slides.length].querySelector('img').loading = 'eager';
+    }
+
+    function scheduleSlide() {
+      clearTimeout(timer);
+      if (paused || document.hidden) return;
+      timer = setTimeout(() => {
+        if (!track.matches(':hover, :focus-within') && !$('dialog[open]')) showSlide(active + 1);
+        scheduleSlide();
+      }, 5500);
+    }
+
+    function updatePlaybackButton() {
+      const label = paused ? 'شروع پخش خودکار' : 'توقف پخش خودکار';
+      toggle.setAttribute('aria-label', label);
+      toggle.title = label;
+      toggle.querySelector('use').setAttribute('href', paused ? '#i-play' : '#i-pause');
+    }
+
+    carousel.addEventListener('click', event => {
+      const button = event.target.closest('button');
+      if (!button) return;
+      if (button.hasAttribute('data-slide-next')) showSlide(active + 1);
+      if (button.hasAttribute('data-slide-previous')) showSlide(active - 1);
+      if (button.hasAttribute('data-slide-to')) showSlide(Number(button.dataset.slideTo));
+      if (button === toggle) {
+        paused = !paused;
+        updatePlaybackButton();
+      }
+      scheduleSlide();
+    });
+
+    slides[1].querySelector('img').loading = 'eager';
+    document.addEventListener('visibilitychange', scheduleSlide);
+    updatePlaybackButton();
+    scheduleSlide();
+  }
+
+  initCarousel();
 
   if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
     const observer = new IntersectionObserver(entries => {
@@ -485,7 +521,6 @@
       if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
     } catch {}
     updateThemeButtons();
-    favorites = new Set(readArray(favoritesKey).filter(id => byId.has(id)));
     renderProducts();
     cartReady = syncCart();
   });
