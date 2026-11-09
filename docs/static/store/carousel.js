@@ -8,13 +8,12 @@
   const track = carousel.querySelector('.showcase-track');
   const slides = [...track.querySelectorAll('[data-slide]')];
   const dots = [...controls.querySelectorAll('[data-slide-to]')];
-  const toggle = controls.querySelector('[data-slide-toggle]');
   const count = controls.querySelector('[data-slide-current]');
   const status = controls.querySelector('[data-slide-status]');
   const formatNumber = new Intl.NumberFormat('fa-IR');
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   let active = 0;
   let timer;
-  let paused = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let gestureStart;
   let dragged = false;
 
@@ -43,7 +42,7 @@
 
   function scheduleSlide() {
     clearTimeout(timer);
-    if (paused || document.hidden) return;
+    if (reducedMotion.matches || document.hidden) return;
     timer = setTimeout(() => {
       if (!gestureStart && !track.querySelector(':focus-visible') && !document.querySelector('dialog[open]')) {
         showSlide(active + 1);
@@ -57,21 +56,9 @@
     scheduleSlide();
   }
 
-  function updatePlaybackButton() {
-    const label = paused ? 'شروع پخش خودکار' : 'توقف پخش خودکار';
-    toggle.setAttribute('aria-label', label);
-    toggle.title = label;
-    toggle.querySelector('use').setAttribute('href', paused ? '#i-play' : '#i-pause');
-  }
-
   controls.querySelector('[data-slide-next]').addEventListener('click', () => navigate(active + 1));
   controls.querySelector('[data-slide-previous]').addEventListener('click', () => navigate(active - 1));
   dots.forEach((dot, index) => dot.addEventListener('click', () => navigate(index)));
-  toggle.addEventListener('click', () => {
-    paused = !paused;
-    updatePlaybackButton();
-    scheduleSlide();
-  });
 
   carousel.addEventListener('keydown', event => {
     if (event.altKey || event.ctrlKey || event.metaKey) return;
@@ -107,7 +94,7 @@
   }, true);
 
   document.addEventListener('visibilitychange', scheduleSlide);
-  updatePlaybackButton();
+  reducedMotion.addEventListener('change', scheduleSlide);
   controls.hidden = false;
   prepareNextImage();
   scheduleSlide();

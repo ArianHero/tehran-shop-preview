@@ -176,7 +176,7 @@ svg {
 .site-search svg { width: 17px; height: 17px; }
 .navigation-band { border-top: 1px solid var(--line); }
 .header-navigation { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: clamp(8px, 1.6vw, 23px); min-height: 51px; position: relative; }
-.top-categories { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 3px; min-width: 0; }
+.top-categories { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 3px; min-width: 0; }
 .top-categories a { display: grid; place-items: center; padding: 4px 0; min-height: 37px; border-radius: 5px; white-space: nowrap; font-size: 12px; font-weight: 660; }
 .top-categories a:hover, .top-categories [aria-current], .header-contact:hover, .header-contact[aria-current] { background: var(--tint); color: var(--accent-ink); }
 .header-contact { display: flex; align-items: center; gap: 6px; white-space: nowrap; border-radius: 6px; padding: 7px 8px; font-size: 12px; font-weight: 740; }
@@ -393,7 +393,7 @@ svg {
 .showcase-controls {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(45px, 1fr) minmax(0, 2fr) minmax(115px, 1fr);
+  grid-template-columns: minmax(74px, 1fr) minmax(0, 2fr) minmax(74px, 1fr);
   align-items: center;
   gap: 8px;
   min-height: 49px;
@@ -405,7 +405,6 @@ svg {
 .showcase-controls .icon-button { width: 36px; height: 36px; }
 .showcase-controls svg { width: 15px; height: 15px; }
 .slide-previous svg { transform: rotate(180deg); }
-.slide-pause { background: var(--hover); }
 .slide-dots { display: flex; align-items: center; justify-self: center; max-width: 100%; overflow-x: auto; scrollbar-width: thin; }
 .slide-dot { display: grid; place-items: center; flex: none; min-width: 22px; height: 36px; padding: 0 4px; }
 .slide-dot:focus-visible { outline-offset: -3px; border-radius: 7px; }
@@ -801,8 +800,8 @@ dialog::backdrop { background: #0a0a0ad1; backdrop-filter: blur(4px); }
 
 @media (max-width: 620px) {
   .header-navigation { gap: 6px; min-height: 62px; }
-  .top-categories { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0; }
-  .top-categories a { padding: 2px 0; }
+  .top-categories { display: flex; flex-wrap: wrap; justify-content: center; gap: 0 4px; }
+  .top-categories a { padding: 2px; }
   .filter-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
   .catalog-topline { gap: 6px; }
   .catalog-collections { gap: 4px; }
