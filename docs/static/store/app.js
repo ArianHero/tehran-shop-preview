@@ -4,12 +4,16 @@
   const $ = selector => document.querySelector(selector);
   const $$ = selector => [...document.querySelectorAll(selector)];
   const runtime = JSON.parse($('#runtime-data').textContent);
+  if (runtime.page === 'home' && window.location.hash === '#support') {
+    window.location.replace(runtime.contact_url);
+    return;
+  }
   const products = runtime.products;
   const byId = new Map(products.map(product => [product.id, product]));
   const cards = new Map($$('#product-grid .product-card').map(card => [Number(card.dataset.productId), card]));
   const initialIds = new Set(runtime.visible_ids);
   const fa = new Intl.NumberFormat('fa-IR');
-  const cartKey = 'tehranshop:preview-cart:v3';
+  const cartKey = 'tehranshop:preview-cart:v4';
   const emptyCart = {items: [], count: 0, total: 0};
   const escaped = {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'};
   const esc = value => String(value ?? '').replace(/[&<>"']/g, character => escaped[character]);
@@ -56,13 +60,12 @@
       button.setAttribute('aria-label', 'فعال کردن ' + name);
       button.title = name;
       button.querySelector('use').setAttribute('href', light ? '#i-moon' : '#i-sun');
-      const label = button.querySelector('[data-theme-label]');
-      if (label) label.textContent = name;
     }
-    $('meta[name="theme-color"]').content = light ? '#f8f6f2' : '#0d1220';
+    $('meta[name="theme-color"]').content = light ? '#ffffff' : '#0d1220';
   }
 
   function renderProducts() {
+    if (!$('#product-grid')) return;
     const term = normalize(query);
     let count = 0;
 
@@ -76,7 +79,6 @@
       const card = cards.get(product.id);
       card.hidden = !visible;
       count += Number(visible);
-
     }
 
     for (const chip of $$('[data-filter-size]')) {
@@ -111,6 +113,7 @@
 
   function setSearchOpen(open) {
     $('#search-panel').hidden = !open;
+    if (runtime.page === 'home') $('#catalog').hidden = !open;
     $('#search-toggle').setAttribute('aria-expanded', String(open));
     if (open) {
       $('#catalog').scrollIntoView({block: 'start'});
@@ -168,10 +171,15 @@
     $('#detail-image').src = product.image;
     $('#detail-image').alt = product.name;
     $('.detail-image .sample-badge').hidden = !product.demo;
-    const tag = $('#detail-tag');
-    tag.textContent = product.badge;
-    tag.hidden = !product.badge;
-    tag.className = 'product-tag product-tag--' + product.tag;
+    $('#detail-tags').innerHTML = product.badges.map(badge =>
+      '<span class="product-tag product-tag--' + esc(badge.tag) + '">' + esc(badge.label) + '</span>'
+    ).join('');
+    const gallery = $('#detail-gallery');
+    gallery.hidden = product.images.length < 2;
+    gallery.innerHTML = gallery.hidden ? '' : product.images.map((url, index) =>
+      '<button type="button" data-photo-index="' + index + '" aria-label="عکس ' + fa.format(index + 1) +
+      '" aria-pressed="' + (index === 0) + '"><img src="' + esc(url) + '" alt="" width="56" height="56"></button>'
+    ).join('');
     $('#product-title').textContent = product.name;
     const price = money(product.price);
     $('#detail-price').innerHTML = product.sale_price === null ? price :
@@ -345,17 +353,14 @@
   }
 
   $('#sort-select')?.addEventListener('change', event => sortProducts(event.target.value));
-  $('#reset-filters').addEventListener('click', resetFilters);
-  $('#empty-reset').addEventListener('click', resetFilters);
-  function setMobileMenu(open) {
-    $('#mobile-nav').hidden = !open;
-    $('#menu-toggle').setAttribute('aria-expanded', String(open));
-    $('#menu-toggle').setAttribute('aria-label', open ? 'بستن منو' : 'باز کردن منو');
-  }
-
-  $('#menu-toggle').addEventListener('click', () => setMobileMenu($('#mobile-nav').hidden));
-  $('#mobile-nav').addEventListener('click', event => {
-    if (event.target.closest('a')) setMobileMenu(false);
+  $('#reset-filters')?.addEventListener('click', resetFilters);
+  $('#empty-reset')?.addEventListener('click', resetFilters);
+  const categoryMenu = $('#category-menu');
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && categoryMenu.open) {
+      categoryMenu.open = false;
+      categoryMenu.querySelector('summary').focus();
+    }
   });
 
   for (const button of $$('[data-theme-toggle]')) {
@@ -372,12 +377,19 @@
     });
   }
 
-  $('#search-toggle').addEventListener('click', () => setSearchOpen($('#search-panel').hidden));
-  $('#search-clear').addEventListener('click', () => setSearchOpen(false));
-  $('#search-panel').addEventListener('submit', event => event.preventDefault());
-  $('#search-input').addEventListener('input', event => {
+  $('#search-toggle')?.addEventListener('click', () => setSearchOpen($('#search-panel').hidden));
+  $('#search-clear')?.addEventListener('click', () => setSearchOpen(false));
+  $('#search-panel')?.addEventListener('submit', event => event.preventDefault());
+  $('#search-input')?.addEventListener('input', event => {
     query = event.target.value.trim();
     renderProducts();
+  });
+
+  $('#detail-gallery').addEventListener('click', event => {
+    const button = event.target.closest('[data-photo-index]');
+    if (!button || !selectedProduct) return;
+    $('#detail-image').src = selectedProduct.images[Number(button.dataset.photoIndex)];
+    $$('#detail-gallery button').forEach(photo => photo.setAttribute('aria-pressed', String(photo === button)));
   });
 
   $('#detail-sizes').addEventListener('click', event => {
@@ -421,6 +433,10 @@
   $('#detail-guide').addEventListener('click', () => showDialog('guide-dialog'));
 
   document.addEventListener('click', event => {
+    if (categoryMenu.open && (!categoryMenu.contains(event.target) || event.target.closest('a'))) {
+      categoryMenu.open = false;
+    }
+    if (event.target.closest('[data-open-guide]')) showDialog('guide-dialog');
     const product = event.target.closest('[data-open-product]');
     if (product) openProduct(Number(product.dataset.openProduct));
     const close = event.target.closest('[data-close-dialog]');
@@ -498,18 +514,6 @@
   }
 
   initCarousel();
-
-  if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    const observer = new IntersectionObserver(entries => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    }, {threshold: .08});
-    document.documentElement.classList.add('motion-ready');
-    $$('.reveal').forEach(element => observer.observe(element));
-  }
 
   renderProducts();
   updateThemeButtons();
