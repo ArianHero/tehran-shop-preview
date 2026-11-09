@@ -1,0 +1,67 @@
+{% extends "store/base.html" %}
+{% load store_numbers %}
+{% block main %}
+<section class="hero" aria-labelledby="hero-title">
+  <img class="hero-photo" src="{{ assets.hero }}" alt="" width="1024" height="681" fetchpriority="high">
+  <div class="hero-shade" aria-hidden="true"></div>
+  <div class="wrap hero-inner">
+    <div class="hero-copy">
+      <div class="eyebrow hero-kicker"><span class="accent-rule"></span><bdi>TRUST. QUALITY. STYLE.</bdi></div>
+      <h1 id="hero-title">اعتماد. کیفیت.<br><em>استایل.</em></h1>
+      <p>پوشاک بسکتبال و تمرین، از جرزی و رکابی تا شلوارک و تی‌شرت.</p>
+      <div class="hero-actions">
+        {% for item in categories %}{% if item.slug == "jerseys" %}
+        <a class="button button-accent" href="{{ item.url }}">جرزی‌ها رو ببین <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        {% endif %}{% endfor %}
+        <a class="hero-secondary" href="#categories">همه دسته‌ها <svg aria-hidden="true"><use href="#i-chevron"/></svg></a>
+      </div>
+    </div>
+    <div class="hero-index" aria-hidden="true" dir="ltr"><span>01</span><span class="hero-index-line"></span> TEHRAN · COURT COLLECTION</div>
+    <div class="court-lines" aria-hidden="true"><span></span></div>
+  </div>
+</section>
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track" dir="ltr">
+    {% for _ in "12" %}
+    <div class="ticker-set"><span>TEHRAN SHOP</span><i>✦</i><span dir="rtl">پوشاک تمرین</span><i>✦</i><span>BASKETBALL COLLECTION</span><i>✦</i><span dir="rtl">پوشاک بسکتبال</span><i>✦</i></div>
+    {% endfor %}
+  </div>
+</div>
+<section class="wrap category-section" id="categories" aria-labelledby="category-title">
+  <div class="section-heading reveal">
+    <div><span class="eyebrow section-kicker"><span class="accent-rule"></span><bdi>SHOP BY CATEGORY</bdi></span><h2 id="category-title">از چی شروع می‌کنی؟</h2></div>
+    <a class="section-link" href="{{ shop_url }}">همه محصولات <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+  </div>
+  <div class="category-cards reveal">
+    {% for item in categories %}
+    <a class="category-card" href="{{ item.url }}">
+      <div class="category-image">
+        {% if item.cover %}<img src="{{ item.cover }}" alt="" width="512" height="512" loading="lazy">{% endif %}
+        <span class="category-number" dir="ltr">/ {{ item.number }}</span>
+      </div>
+      <div class="category-info"><div><strong>{{ item.name }}</strong><span>{{ item.count|fa_number }} مدل</span></div><span class="category-arrow"><svg aria-hidden="true"><use href="#i-arrow"/></svg></span></div>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+<section class="wrap home-catalog" id="catalog" aria-labelledby="catalog-title">
+  <div class="section-heading reveal">
+    <div><span class="eyebrow section-kicker"><span class="accent-rule"></span><bdi>COURT PICKS</bdi></span><h2 id="catalog-title">منتخب‌های زمین</h2></div>
+    <a class="section-link" href="{{ shop_url }}">دیدن کاتالوگ <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+  </div>
+  {% include "store/catalog_grid.html" %}
+</section>
+<section class="social-band">
+  <img class="social-photo" src="{{ assets.court }}" alt="" width="1800" height="790" loading="lazy">
+  <div class="wrap social-inner reveal">
+    <div class="social-copy">
+      <span class="eyebrow"><bdi>TEHRAN BASKETBALL</bdi></span>
+      <h2>تهران‌شاپ در اینستاگرام</h2>
+      <p>صفحه تهران‌شاپ رو در اینستاگرام دنبال کن.</p>
+    </div>
+    <a href="{{ instagram_url }}" class="button button-outline" target="_blank" rel="noopener noreferrer">
+      <svg aria-hidden="true"><use href="#i-insta"/></svg><bdi>@tehran.sporshop</bdi><svg aria-hidden="true"><use href="#i-arrow-up"/></svg>
+    </a>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% load store_numbers %}
+{% if page != "home" %}
+<div class="catalog-toolbar">
+  <div class="size-filters" role="group" aria-label="فیلتر سایز">
+    <span>سایز</span>
+    <button type="button" class="filter-chip" data-filter-size="" aria-pressed="true">همه</button>
+    {% for size in sizes %}<button type="button" class="filter-chip" data-filter-size="{{ size }}" aria-pressed="false" dir="ltr">{{ size }}</button>{% endfor %}
+  </div>
+  <label class="sort-control"><span>مرتب‌سازی</span>
+    <select id="sort-select" aria-label="مرتب‌سازی محصولات">
+      <option value="featured">پیشنهادی</option>
+      <option value="price-asc">ارزان‌ترین</option>
+      <option value="price-desc">گران‌ترین</option>
+      <option value="name">نام محصول</option>
+    </select>
+    <svg aria-hidden="true"><use href="#i-chevron"/></svg>
+  </label>
+</div>
+{% endif %}
+<form class="search-panel" id="search-panel" role="search" hidden>
+  <svg aria-hidden="true"><use href="#i-search"/></svg>
+  <input id="search-input" type="search" placeholder="نام محصول یا دسته رو بنویس…" aria-label="جستجو در همه محصولات" autocomplete="off">
+  <button class="icon-button" id="search-clear" type="button" aria-label="بستن جستجو"><svg aria-hidden="true"><use href="#i-close"/></svg></button>
+</form>
+<div class="results-line">
+  <span id="result-count" role="status">{{ visible_ids|length|fa_number }} مدل</span>
+  <div class="active-filters" id="active-filters" hidden><span id="filter-description"></span><button type="button" id="reset-filters">پاک کردن فیلترها <span aria-hidden="true">×</span></button></div>
+</div>
+<div id="product-grid" class="product-grid">
+  {% for product in products %}
+  <article class="product-card" data-product-id="{{ product.id }}"{% if product.id not in visible_ids %} hidden{% endif %}>
+    <div class="product-visual">
+      <button type="button" class="product-image-button" data-open-product="{{ product.id }}" aria-label="مشاهده {{ product.name }}">
+        <img src="{{ product.image }}" alt="{{ product.name }}" width="512" height="512" loading="lazy">
+      </button>
+      {% if product.demo %}<span class="sample-badge">نمونه</span>{% endif %}
+      <button type="button" class="favorite-button icon-button" data-favorite="{{ product.id }}" aria-label="افزودن به علاقه‌مندی‌ها، {{ product.name }}" aria-pressed="false"><svg aria-hidden="true"><use href="#i-heart"/></svg></button>
+      <button type="button" class="quick-add" data-open-product="{{ product.id }}" aria-label="انتخاب سایز {{ product.name }}"><svg aria-hidden="true"><use href="#i-plus"/></svg></button>
+    </div>
+    <div class="product-info">
+      <div class="product-meta"><span>{{ product.category_name }}</span><span class="product-english" dir="ltr">{{ product.english }}</span></div>
+      <button type="button" class="product-name" data-open-product="{{ product.id }}">{{ product.name }}</button>
+      <div class="product-bottom">
+        <span class="product-price">{{ product.price|fa_number }} <span class="currency">تومان</span></span>
+        {% if product.colors %}<span class="color-swatch" title="{{ product.colors.0.name }}" aria-label="{{ product.colors.0.name }}" style="--swatch: {{ product.colors.0.hex }}"></span>{% endif %}
+      </div>
+    </div>
+  </article>
+  {% endfor %}
+</div>
+<div class="empty-state" id="empty-results" hidden>
+  <svg aria-hidden="true"><use href="#i-search"/></svg>
+  <h3>محصولی پیدا نشد.</h3>
+  <p>فیلترها رو تغییر بده یا یک عبارت دیگه جستجو کن.</p>
+  <button type="button" id="empty-reset" class="section-link">پاک کردن فیلترها <svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+</div>

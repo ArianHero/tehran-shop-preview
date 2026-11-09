@@ -1,0 +1,46 @@
+<dialog class="product-dialog" id="product-dialog" aria-labelledby="product-title">
+  <button type="button" class="modal-close icon-button" data-close-dialog="product-dialog" aria-label="بستن جزئیات محصول"><svg aria-hidden="true"><use href="#i-close"/></svg></button>
+  <div class="product-detail">
+    <div class="detail-image"><img id="detail-image" alt="" width="512" height="512"><span class="sample-badge">محصول نمونه</span></div>
+    <div class="detail-content">
+      <span class="eyebrow" id="detail-english" dir="ltr"></span>
+      <h2 id="product-title"></h2>
+      <div class="detail-price" id="detail-price"></div>
+      <p id="detail-description"></p>
+      <div class="selection-heading"><strong>رنگ</strong><span id="selected-color"></span></div>
+      <div class="detail-colors" id="detail-colors"></div>
+      <div class="selection-heading"><strong>سایز رو انتخاب کن</strong><button type="button" class="text-link" id="detail-guide"><svg aria-hidden="true"><use href="#i-ruler"/></svg>راهنمای سایز</button></div>
+      <div id="detail-sizes" class="size-options" dir="ltr"></div>
+      <button type="button" class="button button-dark add-to-cart" id="add-to-cart" disabled>سایز رو انتخاب کن <svg aria-hidden="true"><use href="#i-bag"/></svg></button>
+      <p class="interaction-error" id="detail-error" role="alert" hidden></p>
+      <p class="detail-demo-note"><span class="status-dot"></span>در این پیش‌نمایش، سبد خرید آزمایشی است.</p>
+    </div>
+  </div>
+</dialog>
+<dialog class="cart-dialog" id="cart-dialog" aria-labelledby="cart-title">
+  <div class="cart-heading"><h2 id="cart-title">سبد خرید <span id="drawer-count">۰</span></h2><button type="button" class="icon-button" data-close-dialog="cart-dialog" aria-label="بستن سبد خرید"><svg aria-hidden="true"><use href="#i-close"/></svg></button></div>
+  <div class="cart-demo-note">سبد خرید آزمایشی</div>
+  <p class="interaction-error" id="cart-error" role="alert" hidden></p>
+  <div class="cart-lines" id="cart-lines"></div>
+  <div class="cart-summary" id="cart-summary" hidden>
+    <div><span>جمع محصولات</span><strong id="cart-total"></strong></div>
+    <button type="button" id="checkout-button" class="button button-accent">بررسی سفارش نمونه <svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+    <button type="button" class="continue-shopping" data-close-dialog="cart-dialog">بازگشت به فروشگاه</button>
+  </div>
+</dialog>
+<dialog class="guide-dialog" id="guide-dialog" aria-labelledby="guide-title">
+  <button type="button" class="modal-close icon-button" data-close-dialog="guide-dialog" aria-label="بستن راهنمای سایز"><svg aria-hidden="true"><use href="#i-close"/></svg></button>
+  <span class="eyebrow" dir="ltr">FIND YOUR FIT</span>
+  <h2 id="guide-title">راهنمای اندازه‌گیری</h2>
+  <p>لباسی که اندازه‌ات هست رو روی سطح صاف بذار و با متر اندازه بگیر.</p>
+  <ol><li><strong>عرض سینه</strong> از زیر یک بغل تا زیر بغل دیگه، بدون کشیدن پارچه.</li><li><strong>قد لباس</strong> از بالای سرشانه تا لبه پایین.</li><li><strong>عرض کمر و قد شلوارک</strong> عرض کمر در حالت عادی و فاصله کمر تا لبه پایین.</li></ol>
+  <p class="guide-notice">جدول اندازه‌های واقعی هر مدل پس از دریافت اطلاعات فروشگاه اضافه می‌شه.</p>
+</dialog>
+<dialog class="notice-dialog" id="notice-dialog" aria-labelledby="notice-title">
+  <button type="button" class="modal-close icon-button" data-close-dialog="notice-dialog" aria-label="بستن پیام"><svg aria-hidden="true"><use href="#i-close"/></svg></button>
+  <span class="notice-icon"><svg aria-hidden="true"><use href="#i-bag"/></svg></span>
+  <h2 id="notice-title">سبد خرید آزمایشی</h2>
+  <p>این نسخه برای دیدن طرح فروشگاه آماده شده. ثبت سفارش و پرداخت در نسخه فروش فعال می‌شه.</p>
+  <button type="button" class="button button-dark" data-close-dialog="notice-dialog">باشه <svg aria-hidden="true"><use href="#i-check"/></svg></button>
+</dialog>
+<div class="toast" id="toast" role="status" hidden><svg aria-hidden="true"><use href="#i-check"/></svg><span></span></div>

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="fa" dir="rtl" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0d1220">
+  <meta name="description" content="تهران‌شاپ، پوشاک بسکتبال و تمرین در تهران. تاپ، رکابی، جرزی، شلوارک و تی‌شرت.">
+  <title>{{ title }} | تهران‌شاپ</title>
+  <script>
+    try {
+      if (localStorage.getItem('tehranshop:theme') === 'light') {
+        document.documentElement.dataset.theme = 'light';
+      }
+    } catch {}
+  </script>
+  <link rel="icon" href="{{ assets.icon }}" type="image/png">
+  <link rel="preload" href="{{ assets.font }}" as="font" type="font/woff2" crossorigin>
+  {% if page == 'home' %}<link rel="preload" href="{{ assets.hero }}" as="image" fetchpriority="high">{% endif %}
+  <link rel="stylesheet" href="{{ assets.css }}">
+  <script src="{{ assets.script }}" defer></script>
+</head>
+<body class="page-{{ page }}" id="top">
+{% include "store/icons.html" %}
+<a class="skip-link" href="#main">رفتن به محتوا</a>
+<div class="utility-bar">
+  <div class="wrap utility-inner">
+    <span class="utility-store"><svg aria-hidden="true"><use href="#i-location"/></svg> تهران · پوشاک بسکتبال</span>
+    <span class="demo-label"><i aria-hidden="true"></i> پیش‌نمایش فروشگاه <span>· محصولات و قیمت‌ها نمونه‌اند</span></span>
+    <a href="{{ instagram_url }}" target="_blank" rel="noopener noreferrer" class="utility-instagram" dir="ltr"><svg aria-hidden="true"><use href="#i-insta"/></svg> @tehran.sporshop</a>
+  </div>
+</div>
+<header class="header" id="header">
+  <div class="wrap header-inner">
+    <a class="brand" href="{{ home_url }}" aria-label="خانه تهران‌شاپ">
+      <img src="{{ assets.logo }}" alt="" width="62" height="62" class="brand-mark">
+      <span class="brand-text" dir="ltr">TEHRAN<span>SHOP</span><small>BASKETBALL & TRAINING</small></span>
+    </a>
+    <nav class="desktop-nav" aria-label="دسته‌بندی اصلی">
+      <a href="{{ shop_url }}"{% if page == 'shop' %} aria-current="page"{% endif %}>فروشگاه</a>
+      {% for item in categories %}
+      <a href="{{ item.url }}"{% if item.slug == category.slug %} aria-current="page"{% endif %}>{{ item.name }}</a>
+      {% endfor %}
+    </nav>
+    <div class="header-actions">
+      <button type="button" class="icon-button menu-toggle" id="menu-toggle" aria-controls="mobile-nav" aria-label="باز کردن منو" aria-expanded="false"><svg aria-hidden="true"><use href="#i-menu"/></svg></button>
+      <button type="button" class="icon-button" id="search-toggle" aria-label="جستجوی محصولات" aria-controls="search-panel" aria-expanded="false"><svg aria-hidden="true"><use href="#i-search"/></svg></button>
+      <button type="button" class="icon-button favorites-toggle" id="favorites-toggle" aria-label="نمایش علاقه‌مندی‌ها" aria-pressed="false"><svg aria-hidden="true"><use href="#i-heart"/></svg><span class="favorite-dot" hidden></span></button>
+      <button type="button" class="icon-button theme-desktop" data-theme-toggle aria-label="فعال کردن حالت روشن" title="حالت روشن"><svg aria-hidden="true"><use href="#i-sun"/></svg></button>
+      <button type="button" class="cart-trigger" id="cart-toggle" aria-label="باز کردن سبد خرید"><svg aria-hidden="true"><use href="#i-bag"/></svg><span class="cart-label">سبد خرید</span><span id="cart-count" class="cart-count">۰</span></button>
+    </div>
+  </div>
+  <nav class="mobile-nav" id="mobile-nav" aria-label="دسته‌بندی موبایل" hidden>
+    <a href="{{ shop_url }}"{% if page == 'shop' %} aria-current="page"{% endif %}>همه محصولات <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    {% for item in categories %}
+    <a href="{{ item.url }}"{% if item.slug == category.slug %} aria-current="page"{% endif %}>{{ item.name }} <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    {% endfor %}
+    <button type="button" class="theme-mobile" data-theme-toggle aria-label="فعال کردن حالت روشن"><span data-theme-label>حالت روشن</span><svg aria-hidden="true"><use href="#i-sun"/></svg></button>
+  </nav>
+</header>
+<main id="main">
+  {% block main %}{% endblock %}
+</main>
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <a class="brand" href="{{ home_url }}" aria-label="خانه تهران‌شاپ">
+        <img src="{{ assets.logo }}" alt="" width="62" height="62" class="brand-mark">
+        <span class="brand-text" dir="ltr">TEHRAN<span>SHOP</span><small>BASKETBALL & TRAINING</small></span>
+      </a>
+      <p>پوشاک بسکتبال و تمرین، از تهران.</p>
+    </div>
+    <nav class="footer-nav" aria-label="دسته‌بندی‌های فروشگاه">
+      <h2>فروشگاه</h2>
+      {% for item in categories %}<a href="{{ item.url }}">{{ item.name }}</a>{% endfor %}
+    </nav>
+    <div class="footer-links">
+      <h2>تهران‌شاپ</h2>
+      <button type="button" id="footer-size-guide">راهنمای اندازه‌گیری</button>
+      <a href="{{ instagram_url }}" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-insta"/></svg><bdi>@tehran.sporshop</bdi></a>
+    </div>
+    <a href="#top" class="back-top" aria-label="بازگشت به بالا">↑</a>
+  </div>
+  <div class="wrap footer-bottom">
+    <span>تهران‌شاپ · پیش‌نمایش فروشگاه</span>
+    <span>تصاویر محصول، قیمت‌ها و سایزبندی‌ها نمونه‌اند.</span>
+    <span dir="ltr">TEHRAN, IRAN</span>
+  </div>
+  {% if page == 'home' %}
+  <details class="wrap photo-credits">
+    <summary>اعتبار عکس‌های بسکتبال</summary>
+    <ul>
+      <li dir="ltr"><a href="https://commons.wikimedia.org/wiki/File:Basketball_goal_-_sunset.jpg" target="_blank" rel="noopener noreferrer">Basketball goal – sunset, StuSeeger</a> · <a href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noopener noreferrer">CC BY 2.0</a> · converted to WebP and displayed with a crop</li>
+      <li dir="ltr"><a href="https://commons.wikimedia.org/wiki/File:Outdoor_basketball_with_sunset_(Unsplash).jpg" target="_blank" rel="noopener noreferrer">Outdoor basketball with sunset, Matteo Paganelli</a> · <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener noreferrer">CC0</a></li>
+    </ul>
+  </details>
+  {% endif %}
+</footer>
+{% include "store/dialogs.html" %}
+<noscript><p class="no-script">برای انتخاب سایز و استفاده از سبد خرید، جاوااسکریپت را فعال کن.</p></noscript>
+{{ runtime|json_script:"runtime-data" }}
+</body>
+</html>

@@ -1,0 +1,41 @@
+{% extends "store/base.html" %}
+{% load store_numbers %}
+{% block main %}
+<div class="wrap">
+  <nav class="breadcrumbs" aria-label="مسیر صفحه">
+    <a href="{{ home_url }}">خانه</a><svg aria-hidden="true"><use href="#i-chevron-left"/></svg>
+    {% if category %}
+      <a href="{{ shop_url }}">فروشگاه</a><svg aria-hidden="true"><use href="#i-chevron-left"/></svg>
+      <span aria-current="page">{{ category.name }}</span>
+    {% else %}
+      <span aria-current="page">فروشگاه</span>
+    {% endif %}
+  </nav>
+  <section class="collection-hero" aria-labelledby="collection-title">
+    <div class="collection-copy">
+      <div class="eyebrow"><span class="accent-rule"></span><bdi>{% if category %}{{ category.english }}{% else %}TEHRAN COURT COLLECTION{% endif %}</bdi></div>
+      <h1 id="collection-title">{{ title }}<span>.</span></h1>
+      <p>{% if category %}{{ category.description }}{% else %}همه مدل‌های نمونه برای زمین، تمرین و روزمره.{% endif %}</p>
+    </div>
+    <div class="collection-art" aria-hidden="true">
+      <span class="collection-index" dir="ltr">{% if category %}{{ category.number }}{% else %}TS{% endif %}</span>
+      {% if category.cover %}<img src="{{ category.cover }}" width="512" height="512" alt="">{% endif %}
+    </div>
+  </section>
+  <section class="catalog-layout" id="catalog" aria-label="کاتالوگ محصولات">
+    <aside class="catalog-sidebar">
+      <h2>دسته‌ها</h2>
+      <nav aria-label="دسته‌بندی کاتالوگ">
+        <a href="{{ shop_url }}"{% if page == 'shop' %} aria-current="page"{% endif %}><span>همه محصولات</span><span>{{ products|length|fa_number }}</span></a>
+        {% for item in categories %}
+        <a href="{{ item.url }}"{% if item.slug == category.slug %} aria-current="page"{% endif %}><span>{{ item.name }}</span><span>{{ item.count|fa_number }}</span></a>
+        {% endfor %}
+      </nav>
+      <div class="sidebar-note"><svg aria-hidden="true"><use href="#i-court"/></svg><p>نمونه‌های پوشاک تهران‌شاپ برای معرفی طراحی فروشگاه.</p></div>
+    </aside>
+    <div class="catalog-main">
+      {% include "store/catalog_grid.html" %}
+    </div>
+  </section>
+</div>
+{% endblock %}
