@@ -4,8 +4,13 @@
   const $ = selector => document.querySelector(selector);
   const $$ = selector => [...document.querySelectorAll(selector)];
   const runtime = JSON.parse($('#runtime-data').textContent);
-  if (runtime.page === 'home' && window.location.hash === '#support') {
+  const {hash, search} = window.location;
+  if (['home', 'landing'].includes(runtime.page) && hash === '#support') {
     window.location.replace(runtime.contact_url);
+    return;
+  }
+  if (runtime.page === 'landing' && ['#new-collection', '#popular', '#sale'].includes(hash)) {
+    window.location.replace(runtime.home_url + search + hash);
     return;
   }
   const products = runtime.products;
@@ -25,12 +30,16 @@
   let cart = emptyCart;
   let cartReady;
   let mutating = false;
-  const params = new URLSearchParams(window.location.search);
+  const params = new URLSearchParams(search);
   const collectionName = params.get('collection');
   const collectionIds = runtime.collection_ids?.[collectionName];
   const activeCollection = Array.isArray(collectionIds) ? collectionName : '';
   const collectionProducts = activeCollection ? new Set(collectionIds) : null;
   const defaultSort = activeCollection === 'new-collection' ? 'newest' : 'featured';
+  const sortSelect = $('#sort-select');
+  const requestedView = params.get('view');
+  let catalogView = Array.from(sortSelect?.options || []).some(option => option.value === requestedView)
+    ? requestedView : defaultSort;
   let query = (params.get('q') || '').trim().slice(0, 120);
   let selectedProduct, selectedSize, selectedColor, toastTimer;
 
@@ -87,7 +96,9 @@
     const selectedCategory = $('#filter-category')?.value || '';
     const category = runtime.category || selectedCategory;
     const size = $('#filter-size').value;
-    const onlySale = $('#filter-sale').checked;
+    const saleChecked = $('#filter-sale').checked;
+    const onlySale = saleChecked || catalogView === 'sale-only';
+    const onlyNew = catalogView === 'new-only';
     const minimumInput = $('#filter-min');
     const maximumInput = $('#filter-max');
     const minimum = parsePrice(minimumInput.value);
@@ -98,7 +109,7 @@
     minimumInput.setAttribute('aria-invalid', String(invalidMinimum));
     maximumInput.setAttribute('aria-invalid', String(invalidMaximum));
     $('#filter-error').hidden = !invalidMinimum && !invalidMaximum;
-    const filterCount = [selectedCategory, size, minimumInput.value.trim(), maximumInput.value.trim(), onlySale]
+    const filterCount = [selectedCategory, size, minimumInput.value.trim(), maximumInput.value.trim(), saleChecked]
       .filter(Boolean).length;
     $('#filter-count').hidden = filterCount === 0;
     $('#filter-count').textContent = fa.format(filterCount);
@@ -114,6 +125,7 @@
         && terms.every(term => searchable.includes(term))
         && (!size || product.sizes.includes(size))
         && (!onlySale || product.sale_price !== null)
+        && (!onlyNew || product.is_new_collection)
         && (invalidMinimum || minimum === null || product.price >= minimum)
         && (invalidMaximum || maximum === null || product.price <= maximum);
       const card = cards.get(product.id);
@@ -130,10 +142,29 @@
   function sortProducts(order) {
     const ordered = [...products];
     if (order === 'newest') ordered.sort((a, b) => b.id - a.id);
+    if (order === 'oldest') ordered.sort((a, b) => a.id - b.id);
     if (order === 'price-asc') ordered.sort((a, b) => a.price - b.price);
     if (order === 'price-desc') ordered.sort((a, b) => b.price - a.price);
     if (order === 'name') ordered.sort((a, b) => a.name.localeCompare(b.name, 'fa'));
     for (const product of ordered) grid.append(cards.get(product.id));
+  }
+
+  function updateCatalogView(view, writeUrl = false) {
+    catalogView = view;
+    sortSelect.value = view;
+    const sortOrder = {'sale-only': defaultSort, 'new-only': 'newest'}[view] || view;
+    sortProducts(sortOrder);
+    renderProducts();
+    for (const link of $$('[data-catalog-view]')) {
+      if (link.dataset.catalogView === view) link.setAttribute('aria-current', 'true');
+      else link.removeAttribute('aria-current');
+    }
+    if (writeUrl) {
+      const url = new URL(window.location.href);
+      if (view === defaultSort) url.searchParams.delete('view');
+      else url.searchParams.set('view', view);
+      window.history.replaceState(window.history.state, '', url);
+    }
   }
 
   function resetFilters() {
@@ -144,14 +175,11 @@
       if (input) input.value = '';
     }
     $('#filter-sale').checked = false;
-    $('#sort-select').value = defaultSort;
-    sortProducts(defaultSort);
     const url = new URL(window.location.href);
-    if (url.searchParams.has('q')) {
-      url.searchParams.delete('q');
-      window.history.replaceState(window.history.state, '', url);
-    }
-    renderProducts();
+    url.searchParams.delete('q');
+    url.searchParams.delete('view');
+    window.history.replaceState(window.history.state, '', url);
+    updateCatalogView(defaultSort);
   }
 
   function showDialog(id) {
@@ -380,15 +408,16 @@
     filterToggle.setAttribute('aria-expanded', String(!filterPanel.hidden));
   });
   filterPanel?.addEventListener('input', renderProducts);
-  $('#sort-select')?.addEventListener('change', event => sortProducts(event.target.value));
+  sortSelect?.addEventListener('change', event => updateCatalogView(event.target.value, true));
   $('#reset-filters')?.addEventListener('click', resetFilters);
   $('#empty-reset')?.addEventListener('click', resetFilters);
-  const categoryMenu = $('#category-menu');
+  const headerMenus = $$('[data-header-menu]');
   document.addEventListener('keydown', event => {
-    if (event.key === 'Escape' && categoryMenu.open) {
-      categoryMenu.open = false;
-      categoryMenu.querySelector('summary').focus();
-    }
+    if (event.key !== 'Escape') return;
+    const openMenu = headerMenus.find(menu => menu.open);
+    if (!openMenu) return;
+    openMenu.open = false;
+    openMenu.querySelector('summary').focus();
   });
 
   for (const button of $$('[data-theme-toggle]')) {
@@ -453,8 +482,16 @@
   $('#detail-guide').addEventListener('click', () => showDialog('guide-dialog'));
 
   document.addEventListener('click', event => {
-    if (categoryMenu.open && (!categoryMenu.contains(event.target) || event.target.closest('a'))) {
-      categoryMenu.open = false;
+    const link = event.target.closest('a');
+    for (const menu of headerMenus) {
+      if (menu.open && (!menu.contains(event.target) || link)) menu.open = false;
+    }
+    if (sortSelect && link?.dataset.catalogView && event.button === 0
+        && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) {
+      event.preventDefault();
+      updateCatalogView(link.dataset.catalogView, true);
+      sortSelect.focus({preventScroll: true});
+      $('#catalog').scrollIntoView({block: 'start'});
     }
     if (event.target.closest('[data-open-guide]')) showDialog('guide-dialog');
     const product = event.target.closest('[data-open-product]');
@@ -489,11 +526,7 @@
       document.title = title + ' | Tehran Shop';
     }
   }
-  if (grid && defaultSort === 'newest') {
-    $('#sort-select').value = defaultSort;
-    sortProducts(defaultSort);
-  }
-  renderProducts();
+  if (sortSelect) updateCatalogView(catalogView);
   updateThemeButtons();
   cartReady = syncCart();
   window.addEventListener('pageshow', event => {
