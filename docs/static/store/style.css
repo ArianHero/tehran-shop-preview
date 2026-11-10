@@ -299,11 +299,13 @@ svg {
 .showcase-heading {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 10px;
-  margin-bottom: 12px;
 }
-.showcase-heading h2 { font-size: clamp(18px, 2.4vw, 26px); line-height: 1.35; }
+.showcase-heading:has(> :not([hidden])) { margin-bottom: 12px; }
+.showcase-heading h2 { display: flex; align-items: center; gap: 10px; font-size: clamp(20px, 2.4vw, 26px); line-height: 1.35; }
+.showcase-collection-link { display: inline-flex; align-items: center; gap: 8px; padding-block: 4px; }
+.showcase-collection-link svg { width: 16px; height: 16px; color: var(--accent-ink); }
+.showcase-collection-link:hover { color: var(--accent-ink); }
 .showcase-viewport { overflow-x: auto; scroll-snap-type: x mandatory; }
 .showcase-track { display: flex; gap: var(--showcase-gap); }
 .showcase[data-carousel-ready] .showcase-viewport { overflow: hidden; overflow: clip; scroll-snap-type: none; }
@@ -394,7 +396,7 @@ svg {
   margin-top: 5px;
 }
 .slide-count { flex: none; color: var(--muted); font-size: 12px; font-weight: 750; font-variant-numeric: tabular-nums; }
-.slide-actions { display: flex; gap: 6px; }
+.slide-actions { display: flex; gap: 6px; margin-inline-start: auto; }
 .slide-actions .icon-button { width: 42px; height: 42px; border: 1px solid var(--line); border-radius: 50%; background: var(--paper); }
 .slide-actions .icon-button:hover { background: var(--hover); }
 .slide-actions svg { width: 16px; height: 16px; }
@@ -464,10 +466,8 @@ svg {
 .landing-links strong { display: block; font-size: 14px; }
 .landing-links svg { width: 17px; height: 17px; color: var(--accent-ink); }
 
-.product-shelf { padding-block: 24px 34px; border-top: 1px solid var(--line); }
+.product-shelf { --showcase-visible: var(--cards-per-view); padding-block: 24px 34px; border-top: 1px solid var(--line); }
 .empty-shop { padding-block: 30px 72px; color: var(--muted); }
-.section-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; margin-bottom: 17px; }
-.section-heading h2 { display: flex; align-items: center; gap: 10px; font-size: clamp(22px, 2.4vw, 29px); line-height: 1.4; }
 .product-shelf h2::before { content: ""; width: 4px; height: .8em; border-radius: 2px; background: var(--accent); }
 #sale-title { color: var(--sale-ink); }
 
@@ -784,8 +784,6 @@ dialog::backdrop { background: #0a0a0ad1; backdrop-filter: blur(4px); }
   .landing-actions { gap: 12px; }
   .landing-links { gap: 7px; }
   .product-shelf { padding-block: 22px 27px; }
-  .section-heading { margin-bottom: 13px; }
-  .section-heading h2 { font-size: 22px; }
   .section-link { font-size: 10px; gap: 5px; }
   .section-link svg { width: 14px; height: 14px; }
   .breadcrumbs { min-height: 41px; font-size: 11px; }
@@ -834,7 +832,6 @@ dialog::backdrop { background: #0a0a0ad1; backdrop-filter: blur(4px); }
   .brand-text { font-size: 12px; }
   .brand-mark { width: 39px; height: 39px; }
   .header-actions .icon-button { width: 33px; }
-  .section-heading h2 { font-size: 22px; }
 }
 
 @media (max-width: 620px) {
