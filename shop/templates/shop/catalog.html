@@ -1,0 +1,4 @@
+{% extends "shop/base.html" %}
+{% block title %}{{ title }} | مستر بیلیارد{% endblock %}
+{% block content %}<div class="catalog-head"><div class="shell"><a href="{% url 'storefront' %}">خانه</a><h1>{{ title }}</h1></div></div>
+<section class="shell section">{% include "shop/cards.html" %}</section>{% endblock %}

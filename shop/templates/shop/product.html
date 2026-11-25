@@ -1,0 +1,24 @@
+{% extends "shop/base.html" %}
+{% load static %}
+{% block title %}{{ product.name }} | مستر بیلیارد{% endblock %}
+{% block content %}
+<section class="shell section">
+<a href="{% url 'storefront' %}#catalog">→ بازگشت به کاتالوگ</a>
+<div class="install detail">
+<div>{% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}">{% endif %}
+{% if product.model_file %}
+<script type="module" src="{% static 'shop/viewer/model-viewer.min.js' %}"></script>
+<h2 class="viewer-title">نمای سه‌بعدی میز</h2>
+<model-viewer src="{{ product.model_file.url }}" camera-controls touch-action="pan-y" shadow-intensity="1" alt="مدل قابل‌چرخش {{ product.name }}" {% if product.image %}poster="{{ product.image.url }}"{% endif %}></model-viewer>
+<p>برای چرخاندن میز، روی مدل بکشید. با دو انگشت یا چرخ ماوس بزرگ‌نمایی کنید.</p>
+<a href="{{ product.model_file.url }}" download>دریافت فایل سه‌بعدی</a>
+{% endif %}</div>
+<div>
+<small>{{ product.get_category_display }}</small><h1>{{ product.name }}</h1>
+<p>{{ product.description|linebreaksbr }}</p>
+{% if product.price != None %}<p>{{ product.price }} تومان</p>{% endif %}
+<a class="button" href="{% url 'storefront' %}?topic=install#installation">استعلام قیمت ←</a>
+</div>
+</div>
+</section>
+{% endblock %}

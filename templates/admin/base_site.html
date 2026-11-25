@@ -1,0 +1,4 @@
+{% extends "admin/base_site.html" %}{% load static %}
+{% block extrastyle %}{{ block.super }}<style>
+@font-face{font-family:Vazir;src:url("{% static 'shop/vazirmatn.woff2' %}")}body,input,textarea,select,button{font-family:Vazir,Tahoma,sans-serif}#header{background:#123e31;color:#f4ead9;border-bottom:3px solid #ad875a}#site-name a{color:#fae1ac}.module h2,.module caption,.inline-group h2,div.breadcrumbs{background:#23543f}.admin-help{padding:12px 18px;border:1px solid #809784;border-radius:8px;margin-bottom:20px}.admin-help summary{cursor:pointer;font-weight:bold}
+</style>{% endblock %}

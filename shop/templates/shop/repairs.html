@@ -1,0 +1,12 @@
+{% extends "shop/base.html" %}
+{% block title %}تعمیرات میز بیلیارد | مستر بیلیارد{% endblock %}
+{% block content %}
+<header class="catalog-head"><div class="shell"><a href="{% url 'storefront' %}">خانه</a><h1>تعمیرات میز بیلیارد</h1></div></header>
+<section class="shell section repair-content">
+<div><h2>میزت چه مشکلی دارد؟</h2><p>اگر توپ روی سطح میز منحرف می‌شود، ماهوت ساییده شده یا توپ از باند درست برنمی‌گردد، نوع میز و نشانه‌ای را که هنگام بازی می‌بینی در فرم بنویس.</p>
+<a class="button" href="{% url 'storefront' %}?topic=repair#installation">درخواست تعمیرات ←</a></div>
+<dl class="panel"><dt>تراز و سطح بازی</dt><dd>بگو انحراف توپ در کدام قسمت میز دیده می‌شود و آیا میز اخیراً جابه‌جا شده است.</dd>
+<dt>ماهوت و باندها</dt><dd>محل پارگی، ساییدگی یا باندی را که برگشت توپ از آن ضعیف شده مشخص کن.</dd>
+<dt>هماهنگی بازدید</dt><dd>شهر و شمارهٔ تماس را بنویس تا دربارهٔ بررسی میز و هزینهٔ تعمیر با تو هماهنگ شود.</dd></dl>
+</section>
+{% endblock %}

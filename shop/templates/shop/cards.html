@@ -1,0 +1,11 @@
+<div class="grid">
+{% for product in products %}
+<article class="card"><a href="{% url 'product' product.pk %}">
+{% if product.image %}<img src="{{ product.image.url }}" alt="" loading="lazy">{% else %}<div class="placeholder" aria-hidden="true">8</div>{% endif %}
+<div class="card-body"><small>{{ product.get_category_display }}</small><h3>{{ product.name }}</h3><span>{% if product.price != None %}{{ product.price }} تومان{% else %}جزئیات محصول{% endif %} ←</span></div>
+</a>
+<a class="quote-link" href="{% url 'storefront' %}?topic=install#installation">استعلام قیمت ←</a></article>
+{% empty %}
+<div class="empty"><p>هنوز محصولی در این بخش منتشر نشده است.</p></div>
+{% endfor %}
+</div>
