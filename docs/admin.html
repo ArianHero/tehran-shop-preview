@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#171f31">
+  <title>مدیریت تهران‌شاپ | نسخهٔ ارائه</title>
+  <link rel="icon" href="static/store/assets/tehran-shop-icon.png">
+  <link rel="manifest" href="admin.webmanifest">
+  <link rel="apple-touch-icon" href="static/store/assets/tehran-admin-192.png">
+  <link rel="stylesheet" href="static/store/admin.css?v=2">
+  <link rel="stylesheet" href="static/store/admin-demo.css?v=1">
+  <script src="static/store/admin-pwa.js?v=1" data-admin-worker="admin-sw.js" defer></script>
+  <script src="static/store/admin.js?v=2" defer></script>
+  <script src="static/store/admin-demo.js?v=1" defer></script>
+</head>
+<body class="demo-admin">
+  <svg class="svg-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M19 12H5m6-6-6 6 6 6"/></symbol>
+  <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></symbol>
+  <symbol id="i-filter" viewBox="0 0 24 24"><path d="M4 6h7m4 0h5M4 12h3m4 0h9M4 18h10m4 0h2M11 4v4M7 10v4m7 2v4"/></symbol>
+  <symbol id="i-bag" viewBox="0 0 24 24"><path d="M5 7h14l1 14H4L5 7Zm3 0V6a4 4 0 0 1 8 0v1"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></symbol>
+  <symbol id="i-ruler" viewBox="0 0 24 24"><path d="m3 15 12-12 6 6L9 21l-6-6Zm9-9 3 3M9 9l2 2m-5 1 3 3"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+  <symbol id="i-insta" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M7 3H4a1 1 0 0 0-1 1c0 9.4 7.6 17 17 17a1 1 0 0 0 1-1v-3l-4.4-2-1.7 1.7a14 14 0 0 1-7.6-7.6L9 7.4 7 3Z"/></symbol>
+  <symbol id="i-location" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7m4-7v7"/></symbol>
+  <symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="m14 6-6 6 6 6"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19m0-14-1.5 1.5m-11 11L5 19"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20.5 14a8.9 8.9 0 0 1-10.6-10.6A8.9 8.9 0 1 0 20.5 14Z"/></symbol>
+</defs></svg>
+
+  <a class="demo-skip" href="#demo-main">رفتن به میز کار</a>
+  <header class="demo-header">
+    <a class="demo-brand" href="admin.html">
+      <img src="static/store/assets/tehran-shop-logo.webp" width="42" height="42" alt="">
+      <span><strong>مدیریت تهران‌شاپ</strong><small>نسخهٔ ارائه</small></span>
+    </a>
+    <div class="admin-actions">
+      <button class="admin-install" type="button" data-admin-install hidden>نصب برنامه</button>
+<p class="admin-install-help" data-admin-install-help hidden role="status">در منوی مرورگر «Install app» یا «Add to Home Screen» را بزنید. در سافاری، این گزینه در منوی اشتراک‌گذاری است.</p>
+
+      <a class="demo-link" href="storefront/index.html">بازگشت به فروشگاه <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    </div>
+  </header>
+
+  <div class="demo-shell">
+    <nav class="demo-menu" aria-label="بخش‌های پنل">
+      <button type="button" data-view="products" aria-current="page"><svg aria-hidden="true"><use href="#i-bag"/></svg> محصولات</button>
+      <button type="button" data-view="posters"><svg aria-hidden="true"><use href="#i-menu"/></svg> پوسترها</button>
+      <button type="button" data-view="preview"><svg aria-hidden="true"><use href="#i-check"/></svg> پیش‌نمایش تغییرات</button>
+      <button type="button" class="demo-reset" id="demo-reset">بازنشانی نمونه‌ها</button>
+    </nav>
+
+    <main class="admin-workspace" id="demo-main">
+      <section class="admin-welcome" aria-labelledby="demo-title">
+        <div>
+          <span class="admin-kicker" dir="ltr">TEHRAN SHOP</span>
+          <h1 id="demo-title">میز کار فروشگاه</h1>
+          <p>تغییرات نسخهٔ ارائه در همین مرورگر ذخیره می‌شوند.</p>
+        </div>
+        <button type="button" class="admin-cta" data-editor="product"><svg aria-hidden="true"><use href="#i-plus"/></svg> افزودن محصول</button>
+      </section>
+      <noscript>برای استفاده از پنل نمونه، جاوااسکریپت را فعال کنید.</noscript>
+      <p class="demo-feedback" id="demo-feedback" role="status" hidden></p>
+
+      <section class="demo-section" data-panel="products" aria-labelledby="demo-products-title">
+        <div class="admin-metrics" aria-label="وضعیت محصولات">
+          <button type="button" class="admin-metric" data-filter="all" aria-pressed="true"><span>همهٔ محصولات</span><strong data-total="all">۰</strong></button>
+          <button type="button" class="admin-metric" data-filter="live" aria-pressed="false"><span>در فروشگاه</span><strong data-total="live">۰</strong></button>
+          <button type="button" class="admin-metric" data-filter="drafts" aria-pressed="false"><span>پیش‌نویس</span><strong data-total="drafts">۰</strong></button>
+          <button type="button" class="admin-metric" data-filter="sales" aria-pressed="false"><span>در حراج</span><strong data-total="sales">۰</strong></button>
+        </div>
+        <div class="admin-guide demo-panel">
+          <div class="admin-panel-heading">
+            <h2 id="demo-products-title" tabindex="-1">محصولات</h2>
+            <label class="demo-search"><svg aria-hidden="true"><use href="#i-search"/></svg><input id="demo-search" type="search" placeholder="نام یا دستهٔ محصول" aria-label="جست‌وجوی محصولات"></label>
+          </div>
+          <div class="admin-items" id="demo-product-list"></div>
+        </div>
+      </section>
+
+      <section class="admin-guide demo-panel" data-panel="posters" aria-labelledby="demo-posters-title" hidden>
+        <div class="admin-panel-heading">
+          <div><h2 id="demo-posters-title" tabindex="-1">پوسترهای اسلایدر</h2><p>عکس، جایگاه و مقصد کلیک پوستر را تنظیم کنید.</p></div>
+          <button type="button" class="admin-cta" data-editor="poster"><svg aria-hidden="true"><use href="#i-plus"/></svg> افزودن پوستر</button>
+        </div>
+        <div class="admin-items" id="demo-poster-list"></div>
+      </section>
+
+      <section class="admin-guide demo-panel" data-panel="preview" aria-labelledby="demo-preview-title" hidden>
+        <div class="admin-panel-heading">
+          <div><h2 id="demo-preview-title" tabindex="-1">پیش‌نمایش تغییرات</h2><p>محصولات و پوسترهای فعال در این بخش‌ها دیده می‌شوند.</p></div>
+        </div>
+        <div id="demo-preview-rows"></div>
+      </section>
+
+      <section class="admin-guide demo-panel" data-panel="product-editor" aria-labelledby="product-editor-title" hidden>
+        <div class="admin-panel-heading">
+          <h2 id="product-editor-title" tabindex="-1">افزودن محصول</h2>
+          <button type="button" class="demo-link" data-view="products">بازگشت به محصولات <svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        </div>
+        <form class="demo-editor" id="demo-product-form">
+          <div>
+            <fieldset>
+              <legend>مشخصات محصول</legend>
+              <div class="demo-fields">
+                <label>نام محصول<input name="name" maxlength="160" placeholder="مثلاً جرزی بسکتبال مشکی" required></label>
+                <label>دسته‌بندی<select name="category" required><option value="">انتخاب دسته</option><option value="socks">جوراب</option><option value="tops">تی‌شرت</option><option value="sweatshirts">دورس</option><option value="hoodies">هودی</option><option value="compression">کشاله</option><option value="pants">شلوار</option><option value="shorts">شلوارک</option><option value="jerseys">جرزی</option><option value="tanks">رکابی</option><option value="zip-jackets">سوئیشرت</option><option value="wristbands">دستبند</option></select></label>
+              </div>
+              <label for="id_sizes">سایزهای موجود</label>
+              <input name="sizes" id="id_sizes" placeholder="S، M، L" required>
+              <small class="demo-help">روی سایزهای آماده بزنید یا سایزها را با ویرگول جدا کنید.</small>
+              <label>توضیح محصول<textarea name="description" rows="3" maxlength="500" placeholder="جنس یا کاربرد لباس را بنویسید." required></textarea></label>
+            </fieldset>
+            <fieldset>
+              <legend>قیمت و وضعیت</legend>
+              <div class="demo-fields">
+                <label>قیمت اصلی (تومان)<input name="price" inputmode="numeric" dir="ltr" maxlength="16" placeholder="۸۰۰٬۰۰۰" required></label>
+                <label>قیمت حراج (اختیاری)<input name="sale_price" inputmode="numeric" dir="ltr" maxlength="16" placeholder="۶۰۰٬۰۰۰"></label>
+              </div>
+              <small class="demo-help">قیمت کمتر، محصول را به حراج اضافه می‌کند. برای پایان حراج کادر را خالی کنید.</small>
+              <label class="demo-check"><input type="checkbox" name="active" checked> نمایش در فروشگاه</label>
+              <small class="demo-help">اگر خاموش باشد، محصول به‌صورت پیش‌نویس ذخیره می‌شود.</small>
+            </fieldset>
+            <fieldset>
+              <legend>نمایش در صفحهٔ اول</legend>
+              <label class="demo-check"><input type="checkbox" name="is_new_collection" checked> جدیدترین‌ها</label>
+              <label class="demo-check"><input type="checkbox" name="is_popular"> پرطرفدارها</label>
+              <label class="demo-check"><input type="checkbox" name="show_in_slider"> اسلایدر بالای صفحه</label>
+              <label>شمارهٔ ترتیب نمایش<input name="position" type="number" min="0" max="99999" value="0" required></label>
+              <small class="demo-help">محصول یا پوستر با عدد کمتر زودتر دیده می‌شود.</small>
+            </fieldset>
+          </div>
+          <aside>
+            <fieldset class="demo-photo-fields">
+              <legend>عکس‌های محصول</legend>
+              <label>انتخاب عکس<input type="file" id="demo-product-photos" accept="image/jpeg,image/png,image/webp" multiple></label>
+              <small class="demo-help">تا ۸ عکس اضافه کنید. اولین عکس، عکس اصلی است.</small>
+              <button type="button" class="demo-link" id="demo-sample-photo">استفاده از عکس نمونه</button>
+              <div class="demo-photo-list" id="demo-photo-list"></div>
+            </fieldset>
+          </aside>
+          <div class="demo-form-end">
+            <p class="demo-error" role="alert" hidden></p>
+            <button type="submit" class="admin-cta">ذخیرهٔ محصول</button>
+            <button type="button" class="demo-link" data-view="products">انصراف</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="admin-guide demo-panel" data-panel="poster-editor" aria-labelledby="poster-editor-title" hidden>
+        <div class="admin-panel-heading">
+          <h2 id="poster-editor-title" tabindex="-1">افزودن پوستر</h2>
+          <button type="button" class="demo-link" data-view="posters">بازگشت به پوسترها</button>
+        </div>
+        <form class="demo-editor" id="demo-poster-form">
+          <div>
+            <fieldset>
+              <legend>مشخصات پوستر</legend>
+              <label>عنوان پوستر<input name="title" maxlength="120" placeholder="مثلاً کالکشن جدید" required></label>
+              <label>مقصد کلیک<select name="destination"><option value="shop">همه محصولات</option><option value="new-collection">جدیدترین‌ها</option><option value="popular">پرطرفدارها</option><option value="sale">حراج</option><option value="category:socks">جوراب</option><option value="category:tops">تی‌شرت</option><option value="category:sweatshirts">دورس</option><option value="category:hoodies">هودی</option><option value="category:compression">کشاله</option><option value="category:pants">شلوار</option><option value="category:shorts">شلوارک</option><option value="category:jerseys">جرزی</option><option value="category:tanks">رکابی</option><option value="category:zip-jackets">سوئیشرت</option><option value="category:wristbands">دستبند</option></select></label>
+              <label>شمارهٔ ترتیب نمایش<input name="position" type="number" min="0" max="99999" value="0" required></label>
+              <small class="demo-help">عدد کمتر زودتر در اسلایدر دیده می‌شود.</small>
+              <label class="demo-check"><input type="checkbox" name="active" checked> نمایش در اسلایدر</label>
+            </fieldset>
+          </div>
+          <aside>
+            <fieldset class="demo-photo-fields">
+              <legend>عکس پوستر</legend>
+              <label>انتخاب عکس<input type="file" id="demo-poster-photo" accept="image/jpeg,image/png,image/webp"></label>
+              <small class="demo-help">عکس افقی در قاب اسلایدر بهتر دیده می‌شود.</small>
+              <button type="button" class="demo-link" id="demo-sample-poster">استفاده از عکس نمونه</button>
+              <div class="demo-photo-list" id="demo-poster-preview"></div>
+            </fieldset>
+          </aside>
+          <div class="demo-form-end">
+            <p class="demo-error" role="alert" hidden></p>
+            <button type="submit" class="admin-cta">ذخیرهٔ پوستر</button>
+            <button type="button" class="demo-link" data-view="posters">انصراف</button>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+  <dialog class="admin-guide demo-dialog" id="demo-reset-confirm" aria-labelledby="demo-reset-title">
+    <h2 id="demo-reset-title">بازنشانی نسخهٔ ارائه</h2>
+    <p>تغییرات این مرورگر حذف می‌شوند و نمونه‌های اول برمی‌گردند.</p>
+    <form method="dialog" class="admin-actions">
+      <button type="submit" class="admin-cta" value="reset">بازنشانی</button>
+      <button type="submit" class="demo-link" value="cancel" autofocus>انصراف</button>
+    </form>
+  </dialog>
+  <script id="admin-demo-data" type="application/json">{"products": [{"id": 1, "name": "\u0633\u062a \u0628\u0633\u06a9\u062a\u0628\u0627\u0644 \u0644\u06cc\u06a9\u0631\u0632 \u06f2\u06f4", "slug": "shayan-demo-jersey", "english": "", "category": "jerseys", "category_name": "\u062c\u0631\u0632\u06cc", "description": "\u062c\u0631\u0632\u06cc \u0634\u0645\u0627\u0631\u0647\u0654 \u06f2\u06f4 \u0628\u0627 \u0634\u0644\u0648\u0627\u0631\u06a9 \u0647\u0645\u200c\u0631\u0646\u06af.", "price": 1490000, "regular_price": 1490000, "sale_price": null, "discount_percent": 0, "tag": "new", "badge": "\u06a9\u0627\u0644\u06a9\u0634\u0646 \u062c\u062f\u06cc\u062f", "badges": [{"tag": "new", "label": "\u06a9\u0627\u0644\u06a9\u0634\u0646 \u062c\u062f\u06cc\u062f"}, {"tag": "popular", "label": "\u067e\u0631\u0637\u0631\u0641\u062f\u0627\u0631"}], "is_popular": true, "is_new_collection": true, "show_in_slider": true, "position": 0, "image": "static/store/assets/shayan-demo-jersey.webp", "images": ["static/store/assets/shayan-demo-jersey.webp"], "sizes": ["M", "L", "XL", "XXL"], "colors": [{"name": "\u0642\u0631\u0645\u0632", "hex": "#a9232c"}], "demo": true, "active": true}, {"id": 2, "name": "\u0647\u0648\u062f\u06cc \u0648\u0631\u0632\u0634\u06cc \u0632\u0631\u062f", "slug": "shayan-demo-hoodie", "english": "", "category": "hoodies", "category_name": "\u0647\u0648\u062f\u06cc", "description": "\u0647\u0648\u062f\u06cc \u062c\u0644\u0648 \u0628\u0633\u062a\u0647 \u0628\u0627 \u0628\u0646\u062f \u06a9\u0644\u0627\u0647 \u0648 \u062c\u06cc\u0628 \u062c\u0644\u0648.", "price": 1690000, "regular_price": 1690000, "sale_price": null, "discount_percent": 0, "tag": "new", "badge": "\u06a9\u0627\u0644\u06a9\u0634\u0646 \u062c\u062f\u06cc\u062f", "badges": [{"tag": "new", "label": "\u06a9\u0627\u0644\u06a9\u0634\u0646 \u062c\u062f\u06cc\u062f"}], "is_popular": false, "is_new_collection": true, "show_in_slider": true, "position": 1, "image": "static/store/assets/shayan-demo-hoodie.webp", "images": ["static/store/assets/shayan-demo-hoodie.webp"], "sizes": ["S", "M", "L", "XL"], "colors": [{"name": "\u0632\u0631\u062f", "hex": "#d5aa24"}], "demo": true, "active": true}, {"id": 3, "name": "\u062f\u0648\u0631\u0633 \u0632\u063a\u0627\u0644\u06cc \u06cc\u0642\u0647\u200c\u06af\u0631\u062f", "slug": "shayan-demo-sweatshirt", "english": "", "category": "sweatshirts", "category_name": "\u062f\u0648\u0631\u0633", "description": "\u062f\u0648\u0631\u0633 \u0628\u062f\u0648\u0646 \u06a9\u0644\u0627\u0647 \u0628\u0627 \u06cc\u0642\u0647\u0654 \u06af\u0631\u062f \u0648 \u0622\u0633\u062a\u06cc\u0646 \u0645\u0634\u06a9\u06cc.", "price": 1490000, "regular_price": 1490000, "sale_price": null, "discount_percent": 0, "tag": "new", "badge": "\u06a9\u0627\u0644\u06a9\u0634\u0646 \u062c\u062f\u06cc\u062f", "badges": [{"tag": "new", "label": "\u06a9\u0627\u0644\u06a9\u0634\u0646 \u062c\u062f\u06cc\u062f"}], "is_popular": false, "is_new_collection": true, "show_in_slider": true, "position": 2, "image": "static/store/assets/shayan-demo-sweatshirt.webp", "images": ["static/store/assets/shayan-demo-sweatshirt.webp"], "sizes": ["S", "M", "L", "XL"], "colors": [{"name": "\u0632\u063a\u0627\u0644\u06cc", "hex": "#35373a"}], "demo": true, "active": true}, {"id": 4, "name": "\u062a\u06cc\u200c\u0634\u0631\u062a \u0648\u0631\u0632\u0634\u06cc \u0637\u0648\u0633\u06cc", "slug": "shayan-demo-tee", "english": "", "category": "tops", "category_name": "\u062a\u06cc\u200c\u0634\u0631\u062a", "description": "\u062a\u06cc\u200c\u0634\u0631\u062a \u0622\u0633\u062a\u06cc\u0646\u200c\u06a9\u0648\u062a\u0627\u0647 \u0648 \u06cc\u0642\u0647\u200c\u06af\u0631\u062f \u0628\u0631\u0627\u06cc \u062a\u0645\u0631\u06cc\u0646.", "price": 640000, "regular_price": 790000, "sale_price": 640000, "discount_percent": 18, "tag": "new", "badge": "\u06a9\u0627\u0644\u06a9\u0634\u0646 \u062c\u062f\u06cc\u062f", "badges": [{"tag": "new", "label": "\u06a9\u0627\u0644\u06a9\u0634\u0646 \u062c\u062f\u06cc\u062f"}, {"tag": "popular", "label": "\u067e\u0631\u0637\u0631\u0641\u062f\u0627\u0631"}, {"tag": "sale", "label": "\u062d\u0631\u0627\u062c"}], "is_popular": true, "is_new_collection": true, "show_in_slider": false, "position": 3, "image": "static/store/assets/shayan-demo-tee.webp", "images": ["static/store/assets/shayan-demo-tee.webp"], "sizes": ["S", "M", "L", "XL"], "colors": [{"name": "\u0637\u0648\u0633\u06cc", "hex": "#555359"}], "demo": true, "active": true}, {"id": 5, "name": "\u0633\u0648\u0626\u06cc\u0634\u0631\u062a \u0632\u06cc\u067e\u200c\u062f\u0627\u0631 \u0632\u063a\u0627\u0644\u06cc", "slug": "shayan-demo-zip-jacket", "english": "", "category": "zip-jackets", "category_name": "\u0633\u0648\u0626\u06cc\u0634\u0631\u062a", "description": "\u0633\u0648\u0626\u06cc\u0634\u0631\u062a \u06a9\u0644\u0627\u0647\u200c\u062f\u0627\u0631 \u0628\u0627 \u0632\u06cc\u067e \u0633\u0631\u062a\u0627\u0633\u0631\u06cc \u0648 \u062f\u0648 \u062c\u06cc\u0628 \u062c\u0644\u0648.", "price": 1790000, "regular_price": 2290000, "sale_price": 1790000, "discount_percent": 21, "tag": "sale", "badge": "\u062d\u0631\u0627\u062c", "badges": [{"tag": "sale", "label": "\u062d\u0631\u0627\u062c"}], "is_popular": false, "is_new_collection": false, "show_in_slider": false, "position": 4, "image": "static/store/assets/shayan-demo-zip-jacket.webp", "images": ["static/store/assets/shayan-demo-zip-jacket.webp"], "sizes": ["M", "L", "XL"], "colors": [{"name": "\u0632\u063a\u0627\u0644\u06cc", "hex": "#3a3a39"}], "demo": true, "active": true}, {"id": 6, "name": "\u0634\u0644\u0648\u0627\u0631 \u0648\u0631\u0632\u0634\u06cc \u0633\u0631\u0645\u0647\u200c\u0627\u06cc", "slug": "shayan-demo-pants", "english": "", "category": "pants", "category_name": "\u0634\u0644\u0648\u0627\u0631", "description": "\u0634\u0644\u0648\u0627\u0631 \u0648\u0631\u0632\u0634\u06cc \u0633\u0631\u0645\u0647\u200c\u0627\u06cc \u0628\u0627 \u06a9\u0645\u0631 \u06a9\u0634\u06cc.", "price": 1090000, "regular_price": 1390000, "sale_price": 1090000, "discount_percent": 21, "tag": "sale", "badge": "\u062d\u0631\u0627\u062c", "badges": [{"tag": "sale", "label": "\u062d\u0631\u0627\u062c"}], "is_popular": false, "is_new_collection": false, "show_in_slider": false, "position": 5, "image": "static/store/assets/shayan-demo-pants.webp", "images": ["static/store/assets/shayan-demo-pants.webp"], "sizes": ["M", "L", "XL"], "colors": [{"name": "\u0633\u0631\u0645\u0647\u200c\u0627\u06cc", "hex": "#23314e"}], "demo": true, "active": true}, {"id": 7, "name": "\u06a9\u0634\u0627\u0644\u0647 \u0648\u0631\u0632\u0634\u06cc \u0645\u0634\u06a9\u06cc", "slug": "shayan-demo-compression", "english": "", "category": "compression", "category_name": "\u06a9\u0634\u0627\u0644\u0647", "description": "\u0634\u0648\u0631\u062a \u062c\u0630\u0628 \u0648\u0631\u0632\u0634\u06cc \u0628\u0631\u0627\u06cc \u067e\u0648\u0634\u06cc\u062f\u0646 \u0632\u06cc\u0631 \u0634\u0644\u0648\u0627\u0631\u06a9.", "price": 690000, "regular_price": 690000, "sale_price": null, "discount_percent": 0, "tag": "", "badge": "", "badges": [], "is_popular": false, "is_new_collection": false, "show_in_slider": false, "position": 6, "image": "static/store/assets/shayan-demo-compression.webp", "images": ["static/store/assets/shayan-demo-compression.webp"], "sizes": ["M", "L", "XL"], "colors": [{"name": "\u0645\u0634\u06a9\u06cc", "hex": "#242326"}], "demo": true, "active": true}, {"id": 8, "name": "\u062c\u0648\u0631\u0627\u0628 \u0648\u0631\u0632\u0634\u06cc \u0646\u06cc\u0645\u200c\u0633\u0627\u0642", "slug": "shayan-demo-socks", "english": "", "category": "socks", "category_name": "\u062c\u0648\u0631\u0627\u0628", "description": "\u062c\u0648\u0631\u0627\u0628 \u0646\u06cc\u0645\u200c\u0633\u0627\u0642 \u062f\u0631 \u0631\u0646\u06af\u200c\u0647\u0627\u06cc \u0645\u0634\u06a9\u06cc\u060c \u0633\u0641\u06cc\u062f \u0648 \u0637\u0648\u0633\u06cc.", "price": 149000, "regular_price": 190000, "sale_price": 149000, "discount_percent": 21, "tag": "sale", "badge": "\u062d\u0631\u0627\u062c", "badges": [{"tag": "sale", "label": "\u062d\u0631\u0627\u062c"}], "is_popular": false, "is_new_collection": false, "show_in_slider": false, "position": 7, "image": "static/store/assets/shayan-demo-socks.webp", "images": ["static/store/assets/shayan-demo-socks.webp"], "sizes": ["\u06f3\u06f9\u2013\u06f4\u06f4"], "colors": [{"name": "\u062a\u0631\u06a9\u06cc\u0628\u06cc", "hex": "#888887"}], "demo": true, "active": true}, {"id": 9, "name": "\u0631\u06a9\u0627\u0628\u06cc \u062a\u0645\u0631\u06cc\u0646\u06cc \u0645\u0634\u06a9\u06cc", "slug": "shayan-demo-tank", "english": "", "category": "tanks", "category_name": "\u0631\u06a9\u0627\u0628\u06cc", "description": "\u0631\u06a9\u0627\u0628\u06cc \u06cc\u0642\u0647\u200c\u06af\u0631\u062f \u0628\u0627 \u0628\u0631\u0634 \u0633\u0627\u062f\u0647 \u0628\u0631\u0627\u06cc \u062a\u0645\u0631\u06cc\u0646.", "price": 690000, "regular_price": 690000, "sale_price": null, "discount_percent": 0, "tag": "popular", "badge": "\u067e\u0631\u0637\u0631\u0641\u062f\u0627\u0631", "badges": [{"tag": "popular", "label": "\u067e\u0631\u0637\u0631\u0641\u062f\u0627\u0631"}], "is_popular": true, "is_new_collection": false, "show_in_slider": false, "position": 8, "image": "static/store/assets/shayan-demo-tank.webp", "images": ["static/store/assets/shayan-demo-tank.webp"], "sizes": ["S", "M", "L", "XL"], "colors": [{"name": "\u0645\u0634\u06a9\u06cc", "hex": "#252524"}], "demo": true, "active": true}, {"id": 10, "name": "\u0645\u0686\u200c\u0628\u0646\u062f \u06a9\u0634\u06cc \u0645\u0634\u06a9\u06cc", "slug": "shayan-demo-wristband", "english": "", "category": "wristbands", "category_name": "\u062f\u0633\u062a\u0628\u0646\u062f", "description": "\u0645\u0686\u200c\u0628\u0646\u062f \u06a9\u0634\u06cc \u0628\u0627 \u0628\u0646\u062f \u0686\u0633\u0628\u06cc \u0628\u0631\u0627\u06cc \u062a\u0645\u0631\u06cc\u0646.", "price": 220000, "regular_price": 220000, "sale_price": null, "discount_percent": 0, "tag": "popular", "badge": "\u067e\u0631\u0637\u0631\u0641\u062f\u0627\u0631", "badges": [{"tag": "popular", "label": "\u067e\u0631\u0637\u0631\u0641\u062f\u0627\u0631"}], "is_popular": true, "is_new_collection": false, "show_in_slider": false, "position": 9, "image": "static/store/assets/shayan-demo-wristband.webp", "images": ["static/store/assets/shayan-demo-wristband.webp"], "sizes": ["\u0641\u0631\u06cc\u200c\u0633\u0627\u06cc\u0632"], "colors": [{"name": "\u0645\u0634\u06a9\u06cc", "hex": "#2b2726"}], "demo": true, "active": true}], "posters": [{"id": 1, "title": "\u067e\u0648\u0633\u062a\u0631 \u06a9\u0627\u0644\u06a9\u0634\u0646 \u062c\u062f\u06cc\u062f (\u0646\u0645\u0648\u0646\u0647)", "position": 3, "image": "media/posters/tehran-shop-new-collection.webp", "destination": "new-collection", "active": true}], "sample_poster": "static/store/assets/basketball-sunset.webp"}</script>
+</body>
+</html>

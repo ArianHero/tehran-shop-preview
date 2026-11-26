@@ -21,6 +21,14 @@
     let inView = false;
     let animation;
     let timer;
+    const progressBar = carousel.querySelector('[data-slide-progress]');
+    const dwell = progressBar ? 3300 : 3800;
+    let progress;
+
+    function stopCountdown() {
+      clearTimeout(timer);
+      progress?.cancel();
+    }
     let gestureStart;
     let dragged = false;
 
@@ -57,20 +65,24 @@
     }
 
     function scheduleSlide() {
-      clearTimeout(timer);
+      stopCountdown();
       if (!inView || animation || visible === slides.length || reducedMotion.matches || document.hidden) return;
+      progress = progressBar?.animate({transform: ['scaleX(0)', 'scaleX(1)']}, {
+        duration: dwell,
+        fill: 'forwards',
+      });
       timer = setTimeout(() => {
         if (gestureStart || carousel.querySelector(':focus-visible') || document.querySelector('dialog[open]')) {
           scheduleSlide();
           return;
         }
         move(1);
-      }, 3800);
+      }, dwell);
     }
 
     function move(step, announce = false) {
       if (visible === slides.length || animation) return;
-      clearTimeout(timer);
+      stopCountdown();
 
       const focused = track.querySelector(':focus-visible');
       const first = track.firstElementChild;
@@ -95,7 +107,7 @@
       const shifted = `translateX(${direction * distance}px)`;
       animation = track.animate(
         {transform: step > 0 ? [start, shifted] : [shifted, start]},
-        {duration: 280, easing: 'cubic-bezier(.2, .75, .25, 1)', fill: 'both'}
+        {duration: progressBar ? 430 : 280, easing: 'cubic-bezier(.2, .75, .25, 1)', fill: 'both'}
       );
       animation.onfinish = finish;
     }
