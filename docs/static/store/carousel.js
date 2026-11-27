@@ -3,6 +3,10 @@
 
   const formatNumber = new Intl.NumberFormat('fa-IR');
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  const hoverPointer = matchMedia('(hover: hover)');
+  const autoplayInterval = 5000;
+  const transitionDuration = 430;
+  const transitionEasing = 'cubic-bezier(.2, .75, .25, 1)';
 
   function setupCarousel(carousel) {
     const controls = carousel.querySelector('[data-slide-controls]');
@@ -19,16 +23,10 @@
     let active = 0;
     let visible;
     let inView = false;
+    let hasEntered = false;
     let animation;
     let timer;
-    const progressBar = carousel.querySelector('[data-slide-progress]');
-    const dwell = progressBar ? 3300 : 3800;
-    let progress;
-
-    function stopCountdown() {
-      clearTimeout(timer);
-      progress?.cancel();
-    }
+    let photoEntrance;
     let gestureStart;
     let dragged = false;
 
@@ -39,7 +37,7 @@
     function syncSlides(focused, announce = false) {
       const cardsPerView = Number(getComputedStyle(carousel).getPropertyValue('--cards-per-view'));
       visible = Math.min(cardsPerView, slides.length);
-      controls.hidden = arrows.hidden = visible === slides.length;
+      controls.hidden = arrows.hidden = false;
 
       slides.forEach((slide, index) => {
         const position = wrap(index - active);
@@ -50,10 +48,11 @@
       count.textContent = formatNumber.format(active + 1);
       preloadAdjacentImages();
       if (announce) status.textContent = slides[active].getAttribute('aria-label');
-      if (focused && focused.closest('[data-slide]').inert && !controls.hidden &&
-          (document.activeElement === focused || document.activeElement === document.body)) {
-        dots[active].focus({preventScroll: true});
+      if (focused && (document.activeElement === focused || document.activeElement === document.body)) {
+        const focusTarget = focused.closest('[data-slide]').inert ? dots[active] : focused;
+        if (focusTarget !== document.activeElement) focusTarget.focus({preventScroll: true});
       }
+      syncAutoplay();
     }
 
     function preloadAdjacentImages() {
@@ -64,50 +63,70 @@
       }
     }
 
-    function scheduleSlide() {
-      stopCountdown();
-      if (!inView || animation || visible === slides.length || reducedMotion.matches || document.hidden) return;
-      progress = progressBar?.animate({transform: ['scaleX(0)', 'scaleX(1)']}, {
-        duration: dwell,
-        fill: 'forwards',
-      });
-      timer = setTimeout(() => {
-        if (gestureStart || carousel.querySelector(':focus-visible') || document.querySelector('dialog[open]')) {
-          scheduleSlide();
-          return;
-        }
-        move(1);
-      }, dwell);
+    function syncAutoplay(reset = false) {
+      const canPlay = inView && !reducedMotion.matches && !document.hidden;
+      if (reset || !canPlay) {
+        clearInterval(timer);
+        timer = undefined;
+      }
+      if (!canPlay || timer !== undefined) return;
+      timer = setInterval(() => {
+        const hovering = hoverPointer.matches && carousel.matches(':hover');
+        const interacting = gestureStart || hovering ||
+          carousel.querySelector(':focus-visible') || document.querySelector('dialog[open]');
+        if (!interacting) move(1);
+      }, autoplayInterval);
     }
 
-    function move(step, announce = false) {
-      if (visible === slides.length || animation) return;
-      stopCountdown();
+    function move(step, manual = false) {
+      if (animation) return;
+      if (manual) syncAutoplay(true);
 
       const focused = track.querySelector(':focus-visible');
       const first = track.firstElementChild;
+      const last = track.lastElementChild;
       const distance = first.getBoundingClientRect().width + parseFloat(getComputedStyle(track).columnGap);
-      // Rotate the original cards at the edge of the window to keep the loop continuous.
-      if (step < 0) track.prepend(track.lastElementChild);
+      const entering = step > 0 ? slides[wrap(active + visible)] : last;
+      if (step < 0) track.prepend(last);
+
+      let edgeCopy;
+      if (!reducedMotion.matches && visible === slides.length) {
+        // Fill the edge during the move when every original card already fits.
+        edgeCopy = entering.cloneNode(true);
+        edgeCopy.removeAttribute('data-slide');
+        edgeCopy.inert = true;
+        edgeCopy.setAttribute('aria-hidden', 'true');
+        track.append(edgeCopy);
+      }
 
       function finish() {
+        edgeCopy?.remove();
         if (step > 0) track.append(first);
         animation?.cancel();
         animation = null;
         active = wrap(active + step);
-        syncSlides(focused, announce);
-        scheduleSlide();
+        syncSlides(focused, manual);
       }
 
       if (reducedMotion.matches) {
         finish();
         return;
       }
+
+      const photo = (step > 0 && edgeCopy ? edgeCopy : entering).querySelector('.showcase-visual');
+      photoEntrance?.cancel();
+      photoEntrance = photo.animate(
+        [
+          {opacity: .55, transform: 'scale(.92)'},
+          {opacity: 1, transform: 'scale(1)'},
+        ],
+        {duration: transitionDuration, easing: transitionEasing}
+      );
       const start = 'translateX(0)';
       const shifted = `translateX(${direction * distance}px)`;
       animation = track.animate(
         {transform: step > 0 ? [start, shifted] : [shifted, start]},
-        {duration: progressBar ? 430 : 280, easing: 'cubic-bezier(.2, .75, .25, 1)', fill: 'both'}
+        {duration: transitionDuration, easing: transitionEasing, fill: 'both'}
       );
       animation.onfinish = finish;
     }
@@ -117,7 +136,7 @@
       active = index;
       track.append(...slides.slice(index), ...slides.slice(0, index));
       syncSlides(null, true);
-      scheduleSlide();
+      syncAutoplay(true);
     }
 
     arrows.querySelector('[data-slide-next]').addEventListener('click', () => move(1, true));
@@ -125,14 +144,14 @@
     dots.forEach((dot, index) => dot.addEventListener('click', () => jumpTo(index)));
 
     carousel.addEventListener('keydown', event => {
-      if (visible === slides.length || event.altKey || event.ctrlKey || event.metaKey) return;
+      if (event.altKey || event.ctrlKey || event.metaKey) return;
       if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
       event.preventDefault();
       move(event.key === 'ArrowLeft' ? direction : -direction, true);
     });
 
     track.addEventListener('pointerdown', event => {
-      if (visible === slides.length || !event.isPrimary || event.button !== 0) return;
+      if (!event.isPrimary || event.button !== 0) return;
       dragged = false;
       gestureStart = {id: event.pointerId, x: event.clientX, y: event.clientY};
     });
@@ -157,18 +176,26 @@
       event.stopPropagation();
     }, true);
 
-    document.addEventListener('visibilitychange', scheduleSlide);
+    document.addEventListener('visibilitychange', () => syncAutoplay());
     reducedMotion.addEventListener('change', () => {
+      if (reducedMotion.matches) photoEntrance?.cancel();
       if (reducedMotion.matches && animation) animation.finish();
-      else scheduleSlide();
+      syncAutoplay();
     });
     carousel.setAttribute('data-carousel-ready', '');
     syncSlides();
     const visibleThreshold = 0.4;
     new IntersectionObserver(([entry]) => {
       inView = entry.intersectionRatio >= visibleThreshold;
+      if (inView && !hasEntered) {
+        hasEntered = true;
+        if (!reducedMotion.matches) {
+          carousel.classList.add('introducing');
+          setTimeout(() => carousel.classList.remove('introducing'), 900);
+        }
+      }
       preloadAdjacentImages();
-      scheduleSlide();
+      syncAutoplay();
     }, {threshold: visibleThreshold}).observe(viewport);
     new ResizeObserver(() => {
       if (animation) {
@@ -176,7 +203,6 @@
         return;
       }
       syncSlides(track.querySelector(':focus-visible'));
-      scheduleSlide();
     }).observe(viewport);
   }
 
